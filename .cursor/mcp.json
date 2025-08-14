@@ -1,0 +1,11 @@
+{
+    "mcpServers": {
+        "fireberry-crm": {
+            "command": "bun",
+            "args": [
+                "run",
+                "dev:stdio"
+            ]
+        }
+    }
+}

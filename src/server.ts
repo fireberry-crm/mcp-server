@@ -13,21 +13,19 @@ export function createServer() {
     const server = new Server(
         {
             name: 'fireberry-crm-server',
+            title: 'Fireberry CRM MCP Server',
             version: VERSION,
         } as const,
         {
             capabilities: {
                 tools: {},
-                resources: {},
-                prompts: {},
-                logging: {},
             },
         } as const
     );
 
     // Register handlers
-    server.setRequestHandler(ListToolsRequestSchema, () => {
-        return registerTools();
+    server.setRequestHandler(ListToolsRequestSchema, async () => {
+        return await registerTools();
     });
 
     server.setRequestHandler(CallToolRequestSchema, (request) => {

@@ -8,8 +8,8 @@ export const pingSchema = z.object({
 /**
  * Register all tools and return the tools list
  */
-export function registerTools() {
-    return {
+export async function registerTools() {
+    return Promise.resolve({
         tools: [
             {
                 name: 'ping', //TODO: Example tool for first code review, will be removed later
@@ -41,5 +41,5 @@ export function registerTools() {
                 inputSchema: zodToJsonSchema(z.object({})),
             },
         ],
-    } as const;
+    } as const);
 }
