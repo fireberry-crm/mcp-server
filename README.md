@@ -207,3 +207,18 @@ This is a solid foundation for your Fireberry CRM MCP server. To extend it:
 6. **Deploy to production**
 
 The modular architecture makes it easy to grow from this simple scaffold into a comprehensive CRM integration.
+
+### Using
+
+at `mcp.json
+
+```json
+{
+    "mcpServers": {
+        "fireberry-crm": {
+            "command": "npx",
+            "args": ["-y", "@fireberry/mcp-server"]
+        }
+    }
+}
+```

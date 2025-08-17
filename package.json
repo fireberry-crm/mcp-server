@@ -5,6 +5,9 @@
     "main": "dist/index.js",
     "module": "src/index.ts",
     "type": "module",
+    "bin": {
+        "mcp-fireberry": "dist/index.js"
+    },
     "private": true,
     "scripts": {
         "dev": "bun run --watch src/index.ts",
