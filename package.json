@@ -34,13 +34,14 @@
         "@types/express": "^5.0.3",
         "cors": "^2.8.5",
         "express": "^5.1.0",
-        "zod": "^4.0.14"
+        "zod": "^4.0.17"
     },
     "devDependencies": {
         "@eslint/js": "^9.33.0",
         "@modelcontextprotocol/inspector": "^0.16.3",
         "@types/bun": "latest",
         "@types/node": "^20.0.0",
+        "dotenv": "^17.2.1",
         "eslint": "^9.33.0",
         "eslint-config-prettier": "^10.1.8",
         "eslint-plugin-prettier": "^5.5.4",
