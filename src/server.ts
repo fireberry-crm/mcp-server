@@ -1,10 +1,10 @@
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { CallToolRequestSchema, ListToolsRequestSchema } from '@modelcontextprotocol/sdk/types.js';
 
-import { z } from 'zod';
-import { registerTools } from './tools/index.js';
+import { metadataFieldsSchema, metadataPicklistSchema, recordCreateSchema, recordUpdateSchema, registerTools } from './tools/index.js';
 import { logger } from './utils/index.js';
-import { VERSION } from './constants.js';
+import { ToolNames, VERSION, type ToolName } from './constants.js';
+import { fireberryApi } from './services/fireberry-api.js';
 
 /**
  * Create and configure the MCP server (shared for both stdio and HTTP)
@@ -28,26 +28,67 @@ export function createServer() {
         return await registerTools();
     });
 
-    server.setRequestHandler(CallToolRequestSchema, (request) => {
+    server.setRequestHandler(CallToolRequestSchema, async (request) => {
         const { name, arguments: args } = request.params;
 
-        if (name === 'ping') {
-            const pingSchema = z.object({
-                message: z.string().optional(),
-            });
-            const parsedArgs = pingSchema.safeParse(args);
-            const message = parsedArgs.success ? (parsedArgs.data.message ?? '') : '';
-            return {
-                content: [
-                    {
-                        type: 'text',
-                        text: `Pong! ${message ? `Message: ${message}` : 'Server is running.'}`,
-                    },
-                ],
-            };
-        }
+        switch (name as ToolName) {
+            case ToolNames.metadataObjects: {
+                const metadataObjects = await fireberryApi.getMetadataObjects();
+                return {
+                    content: [
+                        {
+                            type: 'text',
+                            text: JSON.stringify(metadataObjects, null, 2),
+                        },
+                    ],
+                };
+            }
+            case ToolNames.metadataFields: {
+                const parsedArgs = metadataFieldsSchema.safeParse(args);
+                if (!parsedArgs.success) return { content: [{ type: 'text', text: 'Error parsing object type argument' }] };
+                const { objectType } = parsedArgs.data;
+                const metadataFields = await fireberryApi.getMetadataFields(objectType);
+                return {
+                    content: [
+                        {
+                            type: 'text',
+                            text: JSON.stringify(metadataFields, null, 2),
+                        },
+                    ],
+                };
+            }
+            case ToolNames.metadataPicklist: {
+                const parsedArgs = metadataPicklistSchema.safeParse(args);
+                if (!parsedArgs.success) return { content: [{ type: 'text', text: 'Error parsing picklist argument' }] };
+                const { objectType, fieldName } = parsedArgs.data;
+                const picklist = await fireberryApi.getMetadataPicklist(objectType, fieldName);
+                return { content: [{ type: 'text', text: JSON.stringify(picklist, null, 2) }] };
+            }
 
-        throw new Error(`Unknown tool: ${name}`);
+            case ToolNames.recordCreate: {
+                const parsedArgs = recordCreateSchema.safeParse(args);
+                if (!parsedArgs.success) return { content: [{ type: 'text', text: 'Error parsing record creation arguments' }] };
+                const { objectType, fields } = parsedArgs.data;
+                const record = await fireberryApi.createRecord(objectType, fields);
+                return {
+                    content: [
+                        {
+                            type: 'text',
+                            text: JSON.stringify(record, null, 2),
+                        },
+                    ],
+                };
+            }
+            case ToolNames.recordUpdate: {
+                const parsedArgs = recordUpdateSchema.safeParse(args);
+                if (!parsedArgs.success) return { content: [{ type: 'text', text: 'Error parsing record update arguments' }] };
+                const { objectType, recordId, fields } = parsedArgs.data;
+                const record = await fireberryApi.updateRecord(objectType, recordId, fields);
+                return { content: [{ type: 'text', text: JSON.stringify(record, null, 2) }] };
+            }
+            default:
+                throw new Error(`Unknown tool: ${name}`);
+        }
     });
     // TODO: add resources or remove the comment
     /*   server.setRequestHandler(ListResourcesRequestSchema, async () => {
