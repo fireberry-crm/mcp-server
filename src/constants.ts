@@ -1,7 +1,6 @@
 export { version as VERSION, name as SERVER_NAME, description as SERVER_DESCRIPTION } from '../package.json';
 
 export const ToolNames = {
-    ping: 'ping',
     metadataObjects: 'metadata_objects',
     metadataFields: 'metadata_fields',
     metadataPicklist: 'metadata_picklist',
