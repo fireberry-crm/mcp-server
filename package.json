@@ -1,6 +1,6 @@
 {
     "name": "@fireberry/mcp-server",
-    "description": "Fireberry MCP Server is a server that implements the MCP protocol for Fireberry's CRM.",
+    "description": "MCP Server for hassle-free usage of Fireberry's API.",
     "version": "0.0.1",
     "main": "dist/stdio.js",
     "module": "src/stdio.ts",
@@ -13,6 +13,8 @@
         "dev": "bun run --watch src/stdio.ts",
         "dev:stdio": "bun run --watch src/stdio.ts",
         "lint": "eslint",
+        "lint:fix": "eslint --fix",
+        "format": "prettier --write .",
         "inspect": "mcp-inspector",
         "build": "bun build src/stdio.ts --outdir dist --target node",
         "start": "node dist/stdio.js",

@@ -1,30 +1,10 @@
-import z from 'zod';
 import { zodToJsonSchema } from '../utils/index.js';
 import { ToolNames } from '../constants.js';
+import { metadataPicklistSchema, metadataObjectsSchema, metadataFieldsSchema } from './metadata';
+import { recordCreateSchema, recordUpdateSchema } from './record';
 
-export const metadataObjectsSchema = z.object({});
-export const metadataFieldsSchema = z.object({
-    objectType: z
-        .string()
-        .regex(/^\d+$/, { message: 'objectType must be a string containing only digits' })
-        .describe('The object type to get metadata for'),
-});
-export const metadataPicklistSchema = z.object({
-    objectType: z
-        .string()
-        .regex(/^\d+$/, { message: 'objectType must be a string containing only digits' })
-        .describe('The object type to get metadata for'),
-    fieldName: z.string().describe('The picklist field name to get the values for'),
-});
-export const recordCreateSchema = z.object({
-    objectType: z.string().describe('The object type to create a record for'),
-    fields: z.record(z.string(), z.unknown()).describe('The fields to create the record with'),
-});
-export const recordUpdateSchema = z.object({
-    objectType: z.string().describe('The object type to update a record for'),
-    recordId: z.uuid().describe('The id of the record to update'),
-    fields: z.record(z.string(), z.unknown()).describe('The fields to update the record with'),
-});
+export { metadataPicklistSchema, metadataObjectsSchema, metadataFieldsSchema, recordCreateSchema, recordUpdateSchema };
+
 /**
  * Register all tools and return the tools list
  */

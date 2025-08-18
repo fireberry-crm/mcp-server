@@ -2,51 +2,21 @@ import { z } from 'zod';
 import { logger } from '../utils';
 import env from '../env';
 import type { AutocompleteString } from '../types';
-import { FieldTypes, ReverseFieldTypes, type FieldTypeName } from '../constants';
+import { ReverseFieldTypes } from '../constants';
+import {
+    MetadataObjectSchema,
+    type MetadataObject,
+    MetadataFieldFromAPI,
+    MetadataPicklistFromAPI,
+    type MetadataField,
+    type MetadataPicklist,
+} from '../tools/metadata';
+import { CreateRecordSchema, UpdateRecordResponseSchema, type CreateRecord, type UpdateRecord } from '../tools/record';
 
 const headers = {
     'Content-Type': 'application/json',
     tokenid: env.TOKEN_ID,
 };
-const MetadataObjectSchema = z.object({
-    name: z.string(),
-    systemName: z.string(),
-    objectType: z.string().regex(/^\d+$/, { message: 'objectType must be a string containing only digits' }),
-});
-const MetadataFieldBaseSchema = z.object({
-    label: z.string(),
-    fieldName: z.string(),
-    systemName: z.string(),
-});
-const MetadataFieldFromAPI = MetadataFieldBaseSchema.extend({
-    systemFieldTypeId: z.enum(FieldTypes),
-});
-
-const MetadataPicklistBaseSchema = z.object({
-    label: z.string(),
-    fieldName: z.string(),
-    fieldObjectType: z.string().regex(/^\d+$/, { message: 'fieldObjectType must be a string containing only digits' }),
-    systemName: z.string(),
-    values: z.array(
-        z.object({
-            name: z.string(),
-            value: z.string().regex(/^\d+$/, { message: 'value must be a string containing only digits' }),
-        })
-    ),
-});
-const MetadataPicklistFromAPI = MetadataPicklistBaseSchema.extend({
-    systemFieldTypeId: z.enum(FieldTypes),
-});
-const CreateRecordSchema = z.object({
-    record: z.object({}),
-    success: z.boolean(),
-    _id: z.uuid(),
-});
-
-const UpdateRecordResponseSchema = z.object({
-    success: z.boolean(),
-    record: z.record(z.string(), z.unknown()),
-});
 
 /***
  * status 400
@@ -87,16 +57,6 @@ const getFireberryMetadataResponseSchema = <T extends z.ZodObject | z.ZodArray>(
         message: z.string(),
     });
 };
-type MetadataObject = z.infer<typeof MetadataObjectSchema>;
-interface MetadataField extends z.infer<typeof MetadataFieldBaseSchema> {
-    fieldType: FieldTypeName;
-}
-interface MetadataPicklist extends z.infer<typeof MetadataPicklistBaseSchema> {
-    fieldType: FieldTypeName;
-}
-type CreateRecord = z.infer<typeof CreateRecordSchema>;
-type UpdateRecord = z.infer<typeof UpdateRecordResponseSchema>;
-
 export const fireberryApi = {
     getMetadataObjects: async (): Promise<MetadataObject[] | { error: string }> => {
         // const endpointV2 = `${BASE_URL}/api/v2/metadata/objects`;
