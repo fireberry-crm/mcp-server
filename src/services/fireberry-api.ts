@@ -65,9 +65,13 @@ export const fireberryApi = {
             const response = await fetch(endpointV1, { headers });
             const data = await response.json();
 
-            const parsedData = getFireberryMetadataResponseSchema(z.array(MetadataObjectSchema).nonempty()).parse(data);
+            const parsedData = getFireberryMetadataResponseSchema(z.array(MetadataObjectSchema).nonempty()).safeParse(data);
+            if (!parsedData.success) {
+                logger.error('Failed to parse metadata objects response:', parsedData.error);
+                return { error: 'Invalid response format from API' };
+            }
 
-            return parsedData.data;
+            return parsedData.data.data;
         } catch (error) {
             if (isFireberryError(error)) {
                 return { error: error.Message };
@@ -84,9 +88,13 @@ export const fireberryApi = {
             const response = await fetch(endpoint, { headers });
             const data = await response.json();
 
-            const parsedData = getFireberryMetadataResponseSchema(z.array(MetadataFieldFromAPI).nonempty()).parse(data);
+            const parsedData = getFireberryMetadataResponseSchema(z.array(MetadataFieldFromAPI).nonempty()).safeParse(data);
+            if (!parsedData.success) {
+                logger.error('Failed to parse metadata fields response:', parsedData.error);
+                return { error: 'Invalid response format from API' };
+            }
 
-            return parsedData.data.map(({ systemFieldTypeId, ...field }) => ({
+            return parsedData.data.data.map(({ systemFieldTypeId, ...field }) => ({
                 ...field,
                 fieldType: ReverseFieldTypes[systemFieldTypeId],
             }));

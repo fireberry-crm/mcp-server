@@ -14,7 +14,7 @@
         "dev:stdio": "bun run --watch src/stdio.ts",
         "lint": "eslint",
         "lint:fix": "eslint --fix",
-        "format": "prettier --write .",
+        "format": "prettier --write ./**/*.{ts,js,mjs}",
         "inspect": "mcp-inspector",
         "build": "bun build src/stdio.ts --outdir dist --target node",
         "start": "node dist/stdio.js",

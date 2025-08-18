@@ -13,10 +13,15 @@ if (process.env.NODE_ENV !== 'production') {
 
 const envSchema = z.object({
     BASE_URL: z.url().default('https://api.fireberry.com'),
-    TOKEN_ID: z.string().min(1),
+    TOKEN_ID: z.uuid(),
     LOG_LEVEL: z.enum(['debug', 'info', 'warn', 'error']).default('info'),
 });
 
-export const env = envSchema.parse(process.env);
+const envResult = envSchema.safeParse(process.env);
+if (!envResult.success) {
+    console.error('Environment validation failed:', z.treeifyError(envResult.error));
+    process.exit(1);
+}
+export const env = envResult.data;
 
 export default env;

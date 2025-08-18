@@ -6,9 +6,17 @@ import { logger } from './utils/index.js';
 import { SERVER_DESCRIPTION, SERVER_NAME, ToolNames, VERSION, type ToolName } from './constants.js';
 import { fireberryApi } from './services/fireberry-api.js';
 
+function safeStringify(data: unknown) {
+    try {
+        return JSON.stringify(data, null, 2);
+    } catch (error) {
+        logger.error(error as string);
+        return 'Internal server error';
+    }
+}
 function createToolResponse(data: unknown) {
     return {
-        content: [{ type: 'text' as const, text: typeof data === 'string' ? data : JSON.stringify(data, null, 2) }],
+        content: [{ type: 'text' as const, text: typeof data === 'string' ? data : safeStringify(data) }],
     };
 }
 
