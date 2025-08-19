@@ -6,6 +6,8 @@ export const ToolNames = {
     metadataPicklist: 'metadata_picklist',
     recordCreate: 'record_create',
     recordUpdate: 'record_update',
+    objectCreate: 'object_create',
+    fieldCreate: 'field_create',
 } as const;
 export type ToolName = (typeof ToolNames)[keyof typeof ToolNames];
 

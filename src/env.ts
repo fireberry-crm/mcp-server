@@ -23,5 +23,3 @@ if (!envResult.success) {
     process.exit(1);
 }
 export const env = envResult.data;
-
-export default env;

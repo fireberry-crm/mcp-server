@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { logger } from '../utils';
-import env from '../env';
+import { env } from '../env';
 import type { AutocompleteString } from '../types';
 import { ReverseFieldTypes } from '../constants';
 import {
@@ -12,6 +12,8 @@ import {
     type MetadataPicklist,
 } from '../tools/metadata';
 import { CreateRecordSchema, UpdateRecordResponseSchema, type CreateRecord, type UpdateRecord } from '../tools/record';
+import { CreateObjectSchema, type CreateObject } from '../tools/object';
+import { CreateFieldSchema, type CreateField } from '../tools/field';
 
 const headers = {
     'Content-Type': 'application/json',
@@ -26,6 +28,7 @@ interface FireberryError {
         | 'Invalid Record Name'
         | 'An internal error has occured while processing your request. Please check your data'
         | `Invalid field name: '${string}'`
+        | 'The request is invalid.'
         | 'An error has occurred.'
     >;
 }
@@ -166,6 +169,55 @@ export const fireberryApi = {
                     return { error: 'Unknown error' };
                 }
             }
+            return parsedData.data;
+        } catch (error) {
+            logger.error(error as string);
+            return { error: 'Unknown error' };
+        }
+    },
+    createObject: async (name: string, collectionname: string): Promise<CreateObject | { error: string }> => {
+        try {
+            const endpoint = `${env.BASE_URL}/api/v2/record/58`;
+            const response = await fetch(endpoint, { method: 'POST', headers, body: JSON.stringify({ name, collectionname }) });
+            const data = await response.json();
+
+            logger.debug(JSON.stringify(data, null, 2));
+            if (isFireberryError(data)) {
+                return { error: data.Message };
+            }
+
+            const parsedData = CreateObjectSchema.safeParse(data);
+            if (!parsedData.success) {
+                logger.error('Failed to parse create object response:', parsedData.error);
+                return { error: 'Invalid response format from API' };
+            }
+
+            return parsedData.data;
+        } catch (error) {
+            logger.error(error as string);
+            return { error: 'Unknown error' };
+        }
+    },
+    createTextField: async (objectType: string, fieldName: string, label: string): Promise<CreateField | { error: string }> => {
+        try {
+            const endpoint = `${env.BASE_URL}/api/v2/system-field/${objectType}/text`;
+            const response = await fetch(endpoint, {
+                method: 'POST',
+                headers,
+                body: JSON.stringify({ fieldName, label }),
+            });
+            const data = await response.json();
+            logger.debug(JSON.stringify(data, null, 2));
+            if (isFireberryError(data)) {
+                return { error: data.Message };
+            }
+
+            const parsedData = CreateFieldSchema.safeParse(data);
+            if (!parsedData.success) {
+                logger.error('Failed to parse create field response:', parsedData.error);
+                return { error: 'Invalid response format from API' };
+            }
+
             return parsedData.data;
         } catch (error) {
             logger.error(error as string);

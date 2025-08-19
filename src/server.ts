@@ -1,7 +1,15 @@
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { CallToolRequestSchema, ListToolsRequestSchema } from '@modelcontextprotocol/sdk/types.js';
 
-import { metadataFieldsSchema, metadataPicklistSchema, recordCreateSchema, recordUpdateSchema, registerTools } from './tools/index.js';
+import {
+    metadataFieldsSchema,
+    metadataPicklistSchema,
+    recordCreateSchema,
+    recordUpdateSchema,
+    objectCreateSchema,
+    registerTools,
+    fieldCreateSchema,
+} from './tools/index.js';
 import { logger } from './utils/index.js';
 import { SERVER_DESCRIPTION, SERVER_NAME, ToolNames, VERSION, type ToolName } from './constants.js';
 import { fireberryApi } from './services/fireberry-api.js';
@@ -79,6 +87,20 @@ export function createServer() {
                 const { objectType, recordId, fields } = parsedArgs.data;
                 const record = await fireberryApi.updateRecord(objectType, recordId, fields);
                 return createToolResponse(record);
+            }
+            case ToolNames.objectCreate: {
+                const parsedArgs = objectCreateSchema.safeParse(args);
+                if (!parsedArgs.success) return createToolResponse('Error parsing object creation arguments');
+                const { name, collectionname } = parsedArgs.data;
+                const result = await fireberryApi.createObject(name, collectionname);
+                return createToolResponse(result);
+            }
+            case ToolNames.fieldCreate: {
+                const parsedArgs = fieldCreateSchema.safeParse(args);
+                if (!parsedArgs.success) return createToolResponse('Error parsing field creation arguments');
+                const { objectType, fieldName, label } = parsedArgs.data;
+                const result = await fireberryApi.createTextField(objectType, fieldName, label);
+                return createToolResponse(result);
             }
             default:
                 throw new Error(`Unknown tool: ${name}`);
