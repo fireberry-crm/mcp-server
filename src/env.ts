@@ -13,7 +13,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 const envSchema = z.object({
     BASE_URL: z.url().default('https://api.fireberry.com'),
-    TOKEN_ID: z.uuid(),
+    FIREBERRY_TOKEN_ID: z.uuid(),
     LOG_LEVEL: z.enum(['debug', 'info', 'warn', 'error']).default('info'),
 });
 
