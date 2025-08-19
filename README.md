@@ -1,224 +1,146 @@
-# Fireberry MCP Server
+# Fireberry CRM MCP Server
 
-A well-architected Model Context Protocol (MCP) server for the Fireberry CRM system. This server provides both **stdio** and **streamable HTTP** transports, making it suitable for local integrations (like Claude Desktop) and remote HTTP-based clients.
+🚀 A powerful Model Context Protocol (MCP) server that enables AI assistants to interact with Fireberry CRM. Get instant, secure access to your CRM data through your favorite AI tools.
 
-## Architecture
+[![MCP Compatible](https://img.shields.io/badge/MCP-Compatible-blue.svg)](https://modelcontextprotocol.io)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-The server follows a modular, scalable architecture inspired by the official MCP examples:
+## 🎯 Available Tools
 
-```
-src/
-├── index.ts          # Main entry point (auto-detects transport)
-├── server.ts         # Shared server configuration
-├── stdio.ts          # Stdio transport entry point
-├── http.ts           # HTTP transport entry point
-├── tools/            # Tool implementations
-├── resources/        # Resource implementations
-├── prompts/          # Prompt templates
-├── types/            # Shared TypeScript types
-└── utils/            # Utility functions
-```
+### CRM Tools
 
-## Features
+- **Metadata Management**
+    - `metadata_objects`: List all available CRM object types
+    - `metadata_fields`: Get field definitions for any object type
+    - `metadata_picklist`: Retrieve picklist values for fields
 
-### 🛠️ Tools
+- **Object Management**
+    - `object_create`: Create new custom objects in your CRM
+    - `field_create`: Add custom fields to existing objects
 
-- **ping**: Simple connectivity test with optional message echo
+- **Record Operations**
+    - `record_create`: Create new records for any object type
+    - `record_update`: Update existing records with new values
 
-### 📚 Resources
+## 🚀 Integration Guide
 
-- **status://server**: Real-time server status and information
+### Using Node.js (npx)
 
-### ✉️ Prompts
-
-- **help**: Get guidance on using the server (with optional topic filtering)
-
-### 🚀 Dual Transport Support
-
-- **Stdio**: Perfect for local integrations (Claude Desktop, VS Code, etc.)
-- **HTTP**: Streamable HTTP with SSE for web applications and remote clients
-
-## Quick Start
-
-### Development Mode
-
-```bash
-# Auto-detect transport (defaults to stdio)
-bun run dev
-
-# Force stdio mode
-bun run dev:stdio
-
-# Force HTTP mode
-bun run dev:http
+```json
+{
+    "command": "npx",
+    "args": ["-y", "@fireberry/mcp-server"]
+}
 ```
 
-### Production Mode
+### Using Bun
 
-```bash
-# Build first
-bun run build
-
-# Run with auto-detection
-bun run start
-
-# Or run specific transport
-bun run start:stdio
-bun run start:http
+```json
+{
+    "command": "bunx",
+    "args": ["@fireberry/mcp-server"]
+}
 ```
+
+### Tool-Specific Configuration
+
+#### Claude Desktop & Claude
+
+In `~/.config/claude-desktop/claude_desktop_config.json` or Claude settings:
+
+```json
+{
+    "mcpServers": {
+        "fireberry": {
+            // Use Node.js or Bun config from above
+        }
+    }
+}
+```
+
+#### VS Code (Copilot)
+
+In `.vscode/settings.json`:
+
+```json
+{
+    "github.copilot.advanced": {
+        "mcpServers": {
+            "fireberry": {
+                // Use Node.js or Bun config from above
+            }
+        }
+    }
+}
+```
+
+#### Cursor
+
+In Cursor settings → MCP Servers:
+
+```json
+{
+    "fireberry": {
+        // Use Node.js or Bun config from above
+    }
+}
+```
+
+#### Other Tools
+
+- **Cline**: Add to `~/.config/cline/config.json`
+- **Windsurf**: Configure in Settings → Integrations
+- **Roo Code**: Add via Extensions → MCP Servers
+- **Visual Studio**: Configure through AI Tools → MCP Settings
+
+### Example Prompts
+
+Try these prompts with your AI assistant:
+
+#### Exploring Your CRM
+
+```
+"Show me all the available object types in my CRM"
+"What fields are available for the Contacts object?"
+"List all picklist options for the Status field"
+```
+
+#### Creating Objects and Fields
+
+```
+"Create a new custom object called Projects"
+"Add a text field called Project Code to the Projects object"
+"Create a new Project record with name 'Q1 Initiative'"
+```
+
+## ⚙️ Configuration
 
 ### Environment Variables
 
 ```bash
-# Set transport mode
-export MCP_TRANSPORT=http  # or 'stdio'
-
-# Set log level
-export LOG_LEVEL=debug     # debug, info, warn, error
-
-# Set HTTP port (HTTP mode only)
-export PORT=3001
+# Required
+FIREBERRY_TOKEN_ID=your-user-token-id
 ```
 
-## Transport Usage
+## 🔒 Security
 
-### Stdio Transport (Local)
+- All requests are authenticated using your Fireberry token
+- Data encryption in transit
 
-Perfect for Claude Desktop and local tools:
+## 🤝 Contributing
 
-```json
-// Claude Desktop config (~/.config/claude-desktop/claude_desktop_config.json)
-{
-    "mcpServers": {
-        "fireberry-crm": {
-            "command": "bun",
-            "args": ["run", "dev:stdio"],
-            "cwd": "/path/to/ServerPlatform/mcpServer"
-        }
-    }
-}
-```
+We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
 
-### HTTP Transport (Remote)
+## 📝 License
 
-Great for web applications and remote integrations:
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-```bash
-# Start HTTP server
-bun run dev:http
+## 🆘 Support
 
-# Test with curl
-curl http://localhost:3001/health
+- 📚 [Documentation](https://docs.fireberry.com/mcp)
+- 💬 [Community Forum](https://community.fireberry.com)
+- 📧 [Email Support](mailto:support@fireberry.com)
 
-# Connect via MCP client
-# POST http://localhost:3001/mcp
-```
+---
 
-#### HTTP Endpoints
-
-- `POST /mcp` - MCP JSON-RPC requests
-- `GET /mcp` - Server-Sent Events (SSE) for real-time updates
-- `DELETE /mcp` - Session termination
-- `GET /health` - Health check endpoint
-
-## Development
-
-### Adding New Tools
-
-1. Create tool schema in `src/tools/`
-2. Register in `src/tools/index.ts`
-3. Handle in `src/server.ts` CallToolRequestSchema
-
-```typescript
-// Example tool
-const MyToolSchema = z.object({
-  input: z.string().describe('Tool input'),
-});
-
-// Register in tools/index.ts
-{
-  name: 'my-tool',
-  description: 'Description of my tool',
-  inputSchema: zodToJsonSchema(MyToolSchema),
-}
-
-// Handle in server.ts
-if (name === 'my-tool') {
-  const { input } = MyToolSchema.parse(args);
-  return {
-    content: [{ type: 'text', text: `Result: ${input}` }]
-  };
-}
-```
-
-### Adding New Resources
-
-1. Define resource in `src/resources/index.ts`
-2. Handle in `src/server.ts` ReadResourceRequestSchema
-
-### Adding New Prompts
-
-1. Define prompt in `src/prompts/index.ts`
-2. Handle in `src/server.ts` GetPromptRequestSchema
-
-## Testing
-
-### Using MCP Inspector
-
-```bash
-# Install MCP Inspector
-npm install -g @modelcontextprotocol/inspector
-
-# Test stdio mode
-npx @modelcontextprotocol/inspector bun run src/stdio.ts
-
-# Test built version
-npx @modelcontextprotocol/inspector node dist/stdio.js
-```
-
-### Manual Testing
-
-```bash
-# Test ping tool via stdio
-echo '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"ping","arguments":{"message":"Hello"}}}' | bun run dev:stdio
-
-# Test HTTP health endpoint
-curl http://localhost:3001/health
-```
-
-## Architecture Benefits
-
-✅ **Modular**: Easy to add new tools, resources, and prompts
-✅ **Scalable**: Clean separation of concerns
-✅ **Flexible**: Supports both local and remote usage
-✅ **Type-Safe**: Full TypeScript support
-✅ **Standards-Compliant**: Follows MCP best practices
-✅ **Production-Ready**: Proper error handling and logging
-
-## Next Steps
-
-This is a solid foundation for your Fireberry CRM MCP server. To extend it:
-
-1. **Add CRM-specific tools** (create-contact, search-contacts, etc.)
-2. **Add real resources** (account data, dashboard metrics, etc.)
-3. **Add helpful prompts** (email templates, report generation, etc.)
-4. **Connect to your CRM database**
-5. **Add authentication/authorization**
-6. **Deploy to production**
-
-The modular architecture makes it easy to grow from this simple scaffold into a comprehensive CRM integration.
-
-### Using
-
-at `mcp.json
-
-```json
-{
-    "mcpServers": {
-        "fireberry-crm": {
-            "command": "npx",
-            "args": ["-y", "@fireberry/mcp-server"]
-        }
-    }
-}
-```
+Built with ❤️‍🔥 by the Fireberry Team
