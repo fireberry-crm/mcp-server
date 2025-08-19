@@ -9,7 +9,7 @@ import {
     objectCreateSchema,
     registerTools,
     fieldCreateSchema,
-} from './tools/index.js';
+} from './tools/registerTools.js';
 import { logger } from './utils/index.js';
 import { SERVER_DESCRIPTION, SERVER_NAME, ToolNames, VERSION, type ToolName } from './constants.js';
 import { fireberryApi } from './services/fireberry-api.js';

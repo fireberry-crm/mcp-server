@@ -1,9 +1,9 @@
 import { zodToJsonSchema } from '../utils/index.js';
 import { ToolNames } from '../constants.js';
-import { metadataPicklistSchema, metadataObjectsSchema, metadataFieldsSchema } from './metadata';
-import { recordCreateSchema, recordUpdateSchema } from './record';
-import { objectCreateSchema } from './object';
-import { fieldCreateSchema } from './field';
+import { metadataPicklistSchema, metadataObjectsSchema, metadataFieldsSchema } from './metadata/index.js';
+import { recordCreateSchema, recordUpdateSchema } from './record/index.js';
+import { objectCreateSchema } from './object/index.js';
+import { fieldCreateSchema } from './field/index.js';
 
 export {
     metadataPicklistSchema,
