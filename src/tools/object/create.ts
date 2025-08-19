@@ -1,8 +1,8 @@
 import { z } from 'zod';
 
 export const objectCreateSchema = z.object({
-    name: z.string().min(1).max(80).describe('The name of the object e.g. Account'),
-    collectionname: z.string().min(1).max(80).describe('The plural name of the object e.g. Accounts'),
+    name: z.string().min(1).max(100).describe('The name of the object e.g. Account'),
+    collectionname: z.string().min(1).max(100).describe('The plural name of the object e.g. Accounts'),
 });
 
 export const CreateObjectSchema = z.discriminatedUnion('success', [

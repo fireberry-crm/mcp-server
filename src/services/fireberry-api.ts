@@ -201,11 +201,7 @@ export const fireberryApi = {
     createTextField: async (objectType: string, fieldName: string, label: string): Promise<CreateField | { error: string }> => {
         try {
             const endpoint = `${env.BASE_URL}/api/v2/system-field/${objectType}/text`;
-            const response = await fetch(endpoint, {
-                method: 'POST',
-                headers,
-                body: JSON.stringify({ fieldName, label }),
-            });
+            const response = await fetch(endpoint, { method: 'POST', headers, body: JSON.stringify({ fieldName, label }) });
             const data = await response.json();
             logger.debug(JSON.stringify(data, null, 2));
             if (isFireberryError(data)) {

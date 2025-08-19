@@ -6,11 +6,11 @@ export const fieldCreateSchema = z.object({
         z
             .string()
             .min(1)
-            .max(80)
+            .max(100)
             .regex(/^pcf[a-zA-Z0-9]+$/, 'Field name must start with `pcf` and can only contain letters and numbers')
             .describe('The system name (sql column name) of the field, must start with `pcf` and can only contain letters and numbers')
     ),
-    label: z.string().min(1).max(80).describe('The display label (readable ui name) for the field'),
+    label: z.string().min(1).max(100).describe('The display label (readable ui name) for the field'),
 });
 
 export const CreateFieldSchema = z.discriminatedUnion('success', [
