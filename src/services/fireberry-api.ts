@@ -59,7 +59,6 @@ const getFireberryMetadataResponseSchema = <T extends z.ZodObject | z.ZodArray>(
 };
 export const fireberryApi = {
     getMetadataObjects: async (): Promise<MetadataObject[] | { error: string }> => {
-        // const endpointV2 = `${BASE_URL}/api/v2/metadata/objects`;
         const endpointV1 = `${env.BASE_URL}/metadata/records`;
         try {
             const response = await fetch(endpointV1, { headers });
