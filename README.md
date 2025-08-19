@@ -1,5 +1,10 @@
 # Fireberry CRM MCP Server
 
+<a target="_blank" href="https://fireberry.com">
+<center style="filter:drop-shadow(0 0 18px #fff) drop-shadow(0 0 12px #fff)">
+<img alt="Fireberry's Logo" src="./docs/fireberry-logo.svg">
+</center></a><br>
+
 🚀 A powerful Model Context Protocol (MCP) server that enables AI assistants to interact with Fireberry CRM. Get instant, secure access to your CRM data through your favorite AI tools.
 
 [![MCP Compatible](https://img.shields.io/badge/MCP-Compatible-blue.svg)](https://modelcontextprotocol.io)
