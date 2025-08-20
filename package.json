@@ -1,24 +1,24 @@
 {
     "name": "@fireberry/mcp-server",
-    "description": "Fireberry MCP Server is a server that implements the MCP protocol for Fireberry's CRM.",
+    "description": "MCP Server for hassle-free usage of Fireberry's API.",
     "version": "0.0.1",
-    "main": "dist/index.js",
-    "module": "src/index.ts",
+    "main": "dist/stdio.js",
+    "module": "src/stdio.ts",
     "type": "module",
     "bin": {
-        "mcp-fireberry": "dist/index.js"
+        "mcp-fireberry": "dist/stdio.js"
     },
     "private": true,
     "scripts": {
-        "dev": "bun run --watch src/index.ts",
+        "dev": "bun run --watch src/stdio.ts",
         "dev:stdio": "bun run --watch src/stdio.ts",
-        "dev:http": "bun run --watch src/http.ts",
         "lint": "eslint",
+        "lint:fix": "eslint --fix",
+        "format": "prettier --write ./**/*.{ts,js,mjs}",
         "inspect": "mcp-inspector",
-        "build": "bun build src/index.ts --outdir dist --target node",
-        "start": "node dist/index.js",
+        "build": "bun build src/stdio.ts --outdir dist --target node",
+        "start": "node dist/stdio.js",
         "start:stdio": "node dist/stdio.js",
-        "start:http": "node dist/http.js",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "contributors": [
@@ -38,10 +38,9 @@
     },
     "devDependencies": {
         "@eslint/js": "^9.33.0",
-        "@modelcontextprotocol/inspector": "^0.16.3",
+        "@modelcontextprotocol/inspector": "latest",
         "@types/bun": "latest",
         "@types/node": "^20.0.0",
-        "dotenv": "^17.2.1",
         "eslint": "^9.33.0",
         "eslint-config-prettier": "^10.1.8",
         "eslint-plugin-prettier": "^5.5.4",
@@ -50,5 +49,12 @@
     },
     "peerDependencies": {
         "typescript": "^5"
+    },
+    "optionalDependencies": {
+        "dotenv": "^17.2.1"
+    },
+    "engines": {
+        "node": ">=16.0.0",
+        "npm": ">=8.0.0"
     }
 }

@@ -1,3 +1,4 @@
+import env from '../env';
 /**
  * Simple logging utility for the MCP server
  */
@@ -47,6 +48,6 @@ class Logger {
 }
 
 // Create default logger instance
-const logger = new Logger((process.env.LOG_LEVEL as LogLevel | undefined) || 'info');
+const logger = new Logger(env.LOG_LEVEL);
 
 export { logger };

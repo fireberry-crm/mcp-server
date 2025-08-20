@@ -1,10 +1,24 @@
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { CallToolRequestSchema, ListToolsRequestSchema } from '@modelcontextprotocol/sdk/types.js';
 
-import { z } from 'zod';
-import { registerTools } from './tools/index.js';
+import { metadataFieldsSchema, metadataPicklistSchema, recordCreateSchema, recordUpdateSchema, registerTools } from './tools/index.js';
 import { logger } from './utils/index.js';
-import { VERSION } from './constants.js';
+import { SERVER_DESCRIPTION, SERVER_NAME, ToolNames, VERSION, type ToolName } from './constants.js';
+import { fireberryApi } from './services/fireberry-api.js';
+
+function safeStringify(data: unknown) {
+    try {
+        return JSON.stringify(data, null, 2);
+    } catch (error) {
+        logger.error(error as string);
+        return 'Internal server error';
+    }
+}
+function createToolResponse(data: unknown) {
+    return {
+        content: [{ type: 'text' as const, text: typeof data === 'string' ? data : safeStringify(data) }],
+    };
+}
 
 /**
  * Create and configure the MCP server (shared for both stdio and HTTP)
@@ -12,8 +26,8 @@ import { VERSION } from './constants.js';
 export function createServer() {
     const server = new Server(
         {
-            name: 'fireberry-crm-server',
-            title: 'Fireberry CRM MCP Server',
+            name: SERVER_NAME,
+            title: SERVER_DESCRIPTION,
             version: VERSION,
         } as const,
         {
@@ -28,88 +42,48 @@ export function createServer() {
         return await registerTools();
     });
 
-    server.setRequestHandler(CallToolRequestSchema, (request) => {
+    server.setRequestHandler(CallToolRequestSchema, async (request) => {
         const { name, arguments: args } = request.params;
 
-        if (name === 'ping') {
-            const pingSchema = z.object({
-                message: z.string().optional(),
-            });
-            const parsedArgs = pingSchema.safeParse(args);
-            const message = parsedArgs.success ? (parsedArgs.data.message ?? '') : '';
-            return {
-                content: [
-                    {
-                        type: 'text',
-                        text: `Pong! ${message ? `Message: ${message}` : 'Server is running.'}`,
-                    },
-                ],
-            };
+        switch (name as ToolName) {
+            case ToolNames.metadataObjects: {
+                const metadataObjects = await fireberryApi.getMetadataObjects();
+                return createToolResponse(metadataObjects);
+            }
+            case ToolNames.metadataFields: {
+                const parsedArgs = metadataFieldsSchema.safeParse(args);
+
+                if (!parsedArgs.success) return createToolResponse('Error parsing object type argument');
+
+                const { objectType } = parsedArgs.data;
+                const metadataFields = await fireberryApi.getMetadataFields(objectType);
+                return createToolResponse(metadataFields);
+            }
+            case ToolNames.metadataPicklist: {
+                const parsedArgs = metadataPicklistSchema.safeParse(args);
+                if (!parsedArgs.success) return createToolResponse('Error parsing picklist argument');
+                const { objectType, fieldName } = parsedArgs.data;
+                const picklist = await fireberryApi.getMetadataPicklist(objectType, fieldName);
+                return createToolResponse(picklist);
+            }
+            case ToolNames.recordCreate: {
+                const parsedArgs = recordCreateSchema.safeParse(args);
+                if (!parsedArgs.success) return createToolResponse('Error parsing record creation arguments');
+                const { objectType, fields } = parsedArgs.data;
+                const record = await fireberryApi.createRecord(objectType, fields);
+                return createToolResponse(record);
+            }
+            case ToolNames.recordUpdate: {
+                const parsedArgs = recordUpdateSchema.safeParse(args);
+                if (!parsedArgs.success) return createToolResponse('Error parsing record update arguments');
+                const { objectType, recordId, fields } = parsedArgs.data;
+                const record = await fireberryApi.updateRecord(objectType, recordId, fields);
+                return createToolResponse(record);
+            }
+            default:
+                throw new Error(`Unknown tool: ${name}`);
         }
-
-        throw new Error(`Unknown tool: ${name}`);
     });
-    // TODO: add resources or remove the comment
-    /*   server.setRequestHandler(ListResourcesRequestSchema, async () => {
-    return await registerResources();
-  });
-
-  server.setRequestHandler(ReadResourceRequestSchema, async (request) => {
-    const { uri } = request.params;
-
-    if (uri === "status://server") {
-      const status = {
-        name: "fireberry-crm-server",
-        version: VERSION,
-        status: "running",
-        timestamp: new Date().toISOString(),
-      };
-
-      return {
-        contents: [
-          {
-            uri: uri,
-            text: JSON.stringify(status, null, 2),
-            mimeType: "application/json",
-          },
-        ],
-      };
-    }
-
-    throw new Error(`Unknown resource: ${uri}`);
-  }); */
-    //TODO: add prompts or remove the comment
-    /*   server.setRequestHandler(ListPromptsRequestSchema, async () => {
-    return await registerPrompts();
-  });
-
-  server.setRequestHandler(GetPromptRequestSchema, async (request) => {
-    const { name, arguments: args } = request.params;
-
-    if (name === "help") {
-      const helpSchema = z.object({
-        topic: z.string().optional(),
-      });
-      const parsedArgs = helpSchema.safeParse(args);
-      const topic = parsedArgs.success ? parsedArgs.data.topic : undefined;
-      return {
-        messages: [
-          {
-            role: "user",
-            content: {
-              type: "text",
-              text: topic
-                ? `Please provide help and guidance about ${topic} in the context of Fireberry CRM.`
-                : "Please provide an overview of how to use the Fireberry CRM MCP server and its capabilities.",
-            },
-          },
-        ],
-      };
-    }
-
-    throw new Error(`Unknown prompt: ${name}`);
-  });
- */
 
     // Cleanup function for proper resource management
     const cleanup = () => {

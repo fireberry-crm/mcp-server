@@ -16,3 +16,5 @@ export type ConvertZodObjectToJsonSchema<T extends z.ZodObject> = {
 };
 
 export type ToolSchema<T extends z.ZodObject> = ConvertZodObjectToJsonSchema<T> & z.core.JSONSchema.ObjectSchema;
+
+export type AutocompleteString<T extends string> = T & Record<never, never>;

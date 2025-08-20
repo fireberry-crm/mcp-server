@@ -1,9 +1,9 @@
-import z from 'zod';
 import { zodToJsonSchema } from '../utils/index.js';
+import { ToolNames } from '../constants.js';
+import { metadataPicklistSchema, metadataObjectsSchema, metadataFieldsSchema } from './metadata';
+import { recordCreateSchema, recordUpdateSchema } from './record';
 
-export const pingSchema = z.object({
-    message: z.string().optional().describe('Optional message to echo back'),
-});
+export { metadataPicklistSchema, metadataObjectsSchema, metadataFieldsSchema, recordCreateSchema, recordUpdateSchema };
 
 /**
  * Register all tools and return the tools list
@@ -12,34 +12,32 @@ export async function registerTools() {
     return Promise.resolve({
         tools: [
             {
-                name: 'ping', //TODO: Example tool for first code review, will be removed later
-                description: 'Simple ping tool to test server connectivity',
-                inputSchema: zodToJsonSchema(pingSchema),
-            },
-            {
-                name: 'metadata:objects',
+                name: ToolNames.metadataObjects,
                 description: 'get all fireberry crm object types',
-                //TODO: add schema
-                inputSchema: zodToJsonSchema(z.object({})),
+                inputSchema: zodToJsonSchema(metadataObjectsSchema),
             },
             {
-                name: 'metadata:fields',
+                name: ToolNames.metadataFields,
                 description: 'get all fields by of a crm object',
-                //TODO: add schema
-                inputSchema: zodToJsonSchema(z.object({})),
+                inputSchema: zodToJsonSchema(metadataFieldsSchema),
             },
             {
-                name: 'metadata:picklist',
+                name: ToolNames.metadataPicklist,
                 description: 'get all picklist options of a picklist type field',
-                //TODO: add schema
-                inputSchema: zodToJsonSchema(z.object({})),
+                inputSchema: zodToJsonSchema(metadataPicklistSchema),
             },
             {
-                name: 'record:create',
+                name: ToolNames.recordCreate,
                 description: 'create a new crm record from a specified object type',
-                //TODO: add schema
-                inputSchema: zodToJsonSchema(z.object({})),
+                inputSchema: zodToJsonSchema(recordCreateSchema),
+            },
+            {
+                name: ToolNames.recordUpdate,
+                description: 'update a crm record',
+                inputSchema: zodToJsonSchema(recordUpdateSchema),
             },
         ],
-    } as const);
+    } as const satisfies {
+        tools: { name: (typeof ToolNames)[keyof typeof ToolNames]; description: string; inputSchema: object }[];
+    });
 }
