@@ -81,9 +81,9 @@ export const fireberryApi = {
             }
         }
     },
-    getMetadataFields: async (objectType: string): Promise<MetadataField[] | { error: string }> => {
+    getMetadataFields: async (objectType: number): Promise<MetadataField[] | { error: string }> => {
         try {
-            const endpoint = `${env.BASE_URL}/metadata/records/${objectType}/fields`;
+            const endpoint = `${env.BASE_URL}/metadata/records/${String(objectType)}/fields`;
 
             const response = await fetch(endpoint, { headers });
             const data = await response.json();
@@ -107,9 +107,9 @@ export const fireberryApi = {
             }
         }
     },
-    getMetadataPicklist: async (objectType: string, fieldname: string): Promise<MetadataPicklist | { error: string }> => {
+    getMetadataPicklist: async (objectType: number, fieldname: string): Promise<MetadataPicklist | { error: string }> => {
         try {
-            const endpoint = `${env.BASE_URL}/metadata/records/${objectType}/fields/${fieldname}/values`;
+            const endpoint = `${env.BASE_URL}/metadata/records/${String(objectType)}/fields/${fieldname}/values`;
             const response = await fetch(endpoint, { headers });
             const data = await response.json();
             const parsedData = getFireberryMetadataResponseSchema(MetadataPicklistFromAPI).safeParse(data);
@@ -131,9 +131,9 @@ export const fireberryApi = {
             return { error: 'Unknown error' };
         }
     },
-    createRecord: async (objectType: string, fields: Record<string, unknown>): Promise<CreateRecord | { error: string }> => {
+    createRecord: async (objectType: number, fields: Record<string, unknown>): Promise<CreateRecord | { error: string }> => {
         try {
-            const endpoint = `${env.BASE_URL}/api/v2/record/${objectType}`;
+            const endpoint = `${env.BASE_URL}/api/v2/record/${String(objectType)}`;
             const response = await fetch(endpoint, { method: 'POST', headers, body: JSON.stringify(fields) });
             const data = await response.json();
             const parsedData = CreateRecordSchema.safeParse(data);
@@ -151,12 +151,12 @@ export const fireberryApi = {
         }
     },
     updateRecord: async (
-        objectType: string,
+        objectType: number,
         recordId: string,
         fields: Record<string, unknown>
     ): Promise<UpdateRecord | { error: string }> => {
         try {
-            const endpoint = `${env.BASE_URL}/api/v2/record/${objectType}/${recordId}`;
+            const endpoint = `${env.BASE_URL}/api/v2/record/${String(objectType)}/${recordId}`;
             const response = await fetch(endpoint, { method: 'PUT', headers, body: JSON.stringify(fields) });
             const data = await response.json();
             const parsedData = UpdateRecordResponseSchema.safeParse(data);
@@ -196,9 +196,9 @@ export const fireberryApi = {
             return { error: 'Unknown error' };
         }
     },
-    createTextField: async (objectType: string, label: string, fieldName: string | undefined): Promise<CreateField | { error: string }> => {
+    createTextField: async (objectType: number, label: string, fieldName: string | undefined): Promise<CreateField | { error: string }> => {
         try {
-            const endpoint = `${env.BASE_URL}/api/v2/system-field/${objectType}/text`;
+            const endpoint = `${env.BASE_URL}/api/v2/system-field/${String(objectType)}/text`;
             const response = await fetch(endpoint, { method: 'POST', headers, body: JSON.stringify({ fieldName, label }) });
             const data = await response.json();
             logger.debug(JSON.stringify(data, null, 2));

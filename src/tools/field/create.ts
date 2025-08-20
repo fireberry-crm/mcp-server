@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 export const fieldCreateSchema = z.object({
-    objectType: z.string().regex(/^\d+$/, 'Object type must be a numeric string').describe('The object type to add the field to'),
+    objectType: z.int().describe('The object type to add the field to'),
     fieldName: z.optional(
         z
             .string()
