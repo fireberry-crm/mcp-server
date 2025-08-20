@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { FIELD_NAME_MAX_LENGTH_LIMIT, LABEL_MAX_LENGTH_LIMIT } from '../../constants';
 
 export const fieldCreateSchema = z.object({
     objectType: z.int().describe('The object type to add the field to'),
@@ -6,11 +7,11 @@ export const fieldCreateSchema = z.object({
         z
             .string()
             .min(1)
-            .max(100)
+            .max(FIELD_NAME_MAX_LENGTH_LIMIT)
             .regex(/^pcf[a-zA-Z0-9]+$/, 'Field name must start with `pcf` and can only contain letters and numbers')
             .describe('The system name (sql column name) of the field, must start with `pcf` and can only contain letters and numbers')
     ),
-    label: z.string().min(1).max(100).describe('The display label (readable ui name) for the field'),
+    label: z.string().min(1).max(LABEL_MAX_LENGTH_LIMIT).describe('The display label (readable ui name) for the field'),
 });
 
 export const CreateFieldSchema = z.discriminatedUnion('success', [
