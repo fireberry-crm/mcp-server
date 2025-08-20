@@ -20,9 +20,6 @@ const headers = {
     tokenid: env.FIREBERRY_TOKEN_ID,
 };
 
-/***
- * status 400
- */
 interface FireberryError {
     Message: AutocompleteString<
         | 'Invalid Record Name'
@@ -60,6 +57,7 @@ const getFireberryMetadataResponseSchema = <T extends z.ZodObject | z.ZodArray>(
         message: z.string(),
     });
 };
+
 export const fireberryApi = {
     getMetadataObjects: async (): Promise<MetadataObject[] | { error: string }> => {
         const endpointV1 = `${env.BASE_URL}/metadata/records`;
@@ -198,7 +196,7 @@ export const fireberryApi = {
             return { error: 'Unknown error' };
         }
     },
-    createTextField: async (objectType: string, fieldName: string, label: string): Promise<CreateField | { error: string }> => {
+    createTextField: async (objectType: string, label: string, fieldName: string | undefined): Promise<CreateField | { error: string }> => {
         try {
             const endpoint = `${env.BASE_URL}/api/v2/system-field/${objectType}/text`;
             const response = await fetch(endpoint, { method: 'POST', headers, body: JSON.stringify({ fieldName, label }) });

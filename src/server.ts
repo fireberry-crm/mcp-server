@@ -70,6 +70,7 @@ export function createServer() {
             case ToolNames.metadataPicklist: {
                 const parsedArgs = metadataPicklistSchema.safeParse(args);
                 if (!parsedArgs.success) return createToolResponse('Error parsing picklist argument');
+
                 const { objectType, fieldName } = parsedArgs.data;
                 const picklist = await fireberryApi.getMetadataPicklist(objectType, fieldName);
                 return createToolResponse(picklist);
@@ -77,6 +78,7 @@ export function createServer() {
             case ToolNames.recordCreate: {
                 const parsedArgs = recordCreateSchema.safeParse(args);
                 if (!parsedArgs.success) return createToolResponse('Error parsing record creation arguments');
+
                 const { objectType, fields } = parsedArgs.data;
                 const record = await fireberryApi.createRecord(objectType, fields);
                 return createToolResponse(record);
@@ -84,6 +86,7 @@ export function createServer() {
             case ToolNames.recordUpdate: {
                 const parsedArgs = recordUpdateSchema.safeParse(args);
                 if (!parsedArgs.success) return createToolResponse('Error parsing record update arguments');
+
                 const { objectType, recordId, fields } = parsedArgs.data;
                 const record = await fireberryApi.updateRecord(objectType, recordId, fields);
                 return createToolResponse(record);
@@ -91,6 +94,7 @@ export function createServer() {
             case ToolNames.objectCreate: {
                 const parsedArgs = objectCreateSchema.safeParse(args);
                 if (!parsedArgs.success) return createToolResponse('Error parsing object creation arguments');
+
                 const { name, collectionname } = parsedArgs.data;
                 const result = await fireberryApi.createObject(name, collectionname);
                 return createToolResponse(result);
@@ -98,8 +102,9 @@ export function createServer() {
             case ToolNames.fieldCreate: {
                 const parsedArgs = fieldCreateSchema.safeParse(args);
                 if (!parsedArgs.success) return createToolResponse('Error parsing field creation arguments');
+
                 const { objectType, fieldName, label } = parsedArgs.data;
-                const result = await fireberryApi.createTextField(objectType, fieldName, label);
+                const result = await fireberryApi.createTextField(objectType, label, fieldName);
                 return createToolResponse(result);
             }
             default:
