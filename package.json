@@ -12,7 +12,9 @@
     "scripts": {
         "dev": "bun run --watch src/stdio.ts",
         "dev:stdio": "bun run --watch src/stdio.ts",
+        "check": "tsc --noEmit && eslint",
         "lint": "eslint",
+        "typecheck": "tsc --noEmit",
         "lint:fix": "eslint --fix",
         "format": "prettier --write ./**/*.{ts,js,mjs}",
         "inspect": "mcp-inspector",
