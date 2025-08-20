@@ -35,6 +35,24 @@ const baseFieldSchema = z.object({
     label: z.string().min(1).max(LABEL_MAX_LENGTH_LIMIT).describe('Field name used for system displays.'),
 });
 
+const dateFieldSchema = baseFieldSchema.extend({
+    fieldType: z.literal(FieldTypeNames.date).describe('The type of field to create'),
+});
+const dateTimeFieldSchema = baseFieldSchema.extend({
+    fieldType: z.literal(FieldTypeNames.dateTime).describe('The type of field to create'),
+});
+const phoneNumberFieldSchema = baseFieldSchema.extend({
+    fieldType: z.literal(FieldTypeNames.phoneNumber).describe('The type of field to create'),
+});
+const emailAddressFieldSchema = baseFieldSchema.extend({
+    fieldType: z.literal(FieldTypeNames.emailAddress).describe('The type of field to create'),
+});
+const urlFieldSchema = baseFieldSchema.extend({
+    fieldType: z.literal(FieldTypeNames.url).describe('The type of field to create'),
+});
+const textareaFieldSchema = baseFieldSchema.extend({
+    fieldType: z.literal(FieldTypeNames.textarea).describe('The type of field to create'),
+});
 const textFieldSchema = baseFieldSchema.extend({
     fieldType: z.literal(FieldTypeNames.text).describe('The type of field to create'),
 });
@@ -44,7 +62,16 @@ const numberFieldSchema = baseFieldSchema.extend({
     precision: z.int().min(0).max(4).default(0).describe('Number between 0-4 to set the amount of digits after the decimal point'),
 });
 
-export const fieldCreateSchemaForCall = z.discriminatedUnion('fieldType', [textFieldSchema, numberFieldSchema]);
+export const fieldCreateSchemaForCall = z.discriminatedUnion('fieldType', [
+    textFieldSchema,
+    numberFieldSchema,
+    dateFieldSchema,
+    dateTimeFieldSchema,
+    phoneNumberFieldSchema,
+    emailAddressFieldSchema,
+    urlFieldSchema,
+    textareaFieldSchema,
+]);
 export const fieldCreateSchemaForRegister = baseFieldSchema.extend({
     precision: z.optional(
         z

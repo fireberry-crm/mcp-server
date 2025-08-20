@@ -227,6 +227,12 @@ export const fireberryApi = {
 function createFieldBody(fieldData: CreateFieldInputSchema<FieldTypeNamesForCreate>) {
     switch (fieldData.fieldType) {
         case FieldTypeNames.text:
+        case FieldTypeNames.date:
+        case FieldTypeNames.dateTime:
+        case FieldTypeNames.phoneNumber:
+        case FieldTypeNames.emailAddress:
+        case FieldTypeNames.url:
+        case FieldTypeNames.textarea:
             return { fieldName: fieldData.fieldName, label: fieldData.label };
         case FieldTypeNames.number:
             return { fieldName: fieldData.fieldName, label: fieldData.label, precision: fieldData.precision };
