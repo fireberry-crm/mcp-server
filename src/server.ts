@@ -12,7 +12,7 @@ import {
 } from './tools/registerTools.js';
 import { logger } from './utils/index.js';
 import { SERVER_DESCRIPTION, SERVER_NAME, ToolNames, VERSION, type ToolName } from './constants.js';
-import { fireberryApi } from './services/fireberry-api.js';
+import { fireberryApi } from './services/fireberryApi.js';
 import { z } from 'zod';
 
 function safeStringify(data: unknown) {
