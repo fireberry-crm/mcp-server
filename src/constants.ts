@@ -1,4 +1,8 @@
-export { version as VERSION, name as SERVER_NAME, description as SERVER_DESCRIPTION } from '../package.json';
+import packageJson from '../package.json' with { type: 'json' };
+
+export const VERSION = packageJson.version;
+export const SERVER_NAME = packageJson.name;
+export const SERVER_DESCRIPTION = packageJson.description;
 
 export const ToolNames = {
     metadataObjects: 'metadata_objects',

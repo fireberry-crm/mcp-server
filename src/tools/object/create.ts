@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { MAX_LENGTH_OBJECT_NAME } from '../../constants';
+import { MAX_LENGTH_OBJECT_NAME } from '../../constants.js';
 
 export const objectCreateSchema = z.object({
     name: z.string().min(1).max(MAX_LENGTH_OBJECT_NAME).describe('The name of the object e.g. Account'),

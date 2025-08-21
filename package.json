@@ -11,8 +11,10 @@
     "private": true,
     "scripts": {
         "dev": "bun run --watch src/stdio.ts",
+        "dev:tsc": "tsc --watch --project tsconfig.prod.json",
         "dev:stdio": "bun run --watch src/stdio.ts",
         "check": "tsc --noEmit && eslint",
+        "build:tsc": "tsc --project tsconfig.prod.json",
         "lint": "eslint",
         "typecheck": "tsc --noEmit",
         "lint:fix": "eslint --fix",
@@ -58,7 +60,7 @@
         "dotenv": "^17.2.1"
     },
     "engines": {
-        "node": ">=16.0.0",
+        "node": ">=18",
         "npm": ">=8.0.0"
     }
 }

@@ -1,4 +1,4 @@
-import { env } from '../env';
+import { env } from '../env.js';
 /**
  * Simple logging utility for the MCP server
  */
