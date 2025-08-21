@@ -24,8 +24,10 @@ function safeStringify(data: unknown) {
     }
 }
 function createToolResponse(data: unknown) {
+    const isError = typeof data === 'object' && data !== null && 'error' in data && data.error !== undefined;
     return {
-        content: [{ type: 'text' as const, text: typeof data === 'string' ? data : safeStringify(data) }],
+        content: [{ type: 'text' as const, text: typeof data === 'string' ? data : isError ? data.error : safeStringify(data) }],
+        isError,
     };
 }
 
@@ -33,6 +35,7 @@ function createToolResponse(data: unknown) {
 function createToolResponseParsingError(msg: string, error: z.ZodError) {
     return {
         content: [{ type: 'text' as const, text: `${msg} ${JSON.stringify(z.treeifyError(error), null, 2)}` }],
+        isError: true,
     };
 }
 
