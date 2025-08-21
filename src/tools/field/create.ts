@@ -8,13 +8,14 @@ export const FieldTypeNames = {
     phoneNumber: 'phonenumber',
     number: 'number',
     textarea: 'textarea',
-    html: 'html',
     date: 'date',
     dateTime: 'datetime',
     lookup: 'lookup',
-    summary: 'summary',
-    formula: 'formula',
-    picklist: 'picklist',
+    // TODO: add these back when implemented
+    // html: 'html',
+    // summary: 'summary',
+    // formula: 'formula',
+    // picklist: 'picklist',
 } as const;
 
 export type FieldTypeNamesForCreate = (typeof FieldTypeNames)[keyof typeof FieldTypeNames];
@@ -56,6 +57,10 @@ const textareaFieldSchema = baseFieldSchema.extend({
 const textFieldSchema = baseFieldSchema.extend({
     fieldType: z.literal(FieldTypeNames.text).describe('The type of field to create'),
 });
+const lookupFieldSchema = baseFieldSchema.extend({
+    fieldType: z.literal(FieldTypeNames.lookup).describe('The type of field to create'),
+    relatedObjectType: z.int32().describe('The number of the object type this field will relate records from.'),
+});
 
 const numberFieldSchema = baseFieldSchema.extend({
     fieldType: z.literal(FieldTypeNames.number).describe('The type of field to create'),
@@ -71,8 +76,10 @@ export const fieldCreateSchemaForCall = z.discriminatedUnion('fieldType', [
     emailAddressFieldSchema,
     urlFieldSchema,
     textareaFieldSchema,
+    lookupFieldSchema,
 ]);
 export const fieldCreateSchemaForRegister = baseFieldSchema.extend({
+    fieldType: z.optional(z.string().describe(`REQUIRED The type of field to create ${Object.values(FieldTypeNames).join(',')}`)),
     precision: z.optional(
         z
             .int()
@@ -80,7 +87,14 @@ export const fieldCreateSchemaForRegister = baseFieldSchema.extend({
             .max(4)
             .default(0)
             .describe(
-                '(required only for number fields, forbidden for others) Number between 0-4 to set the amount of digits after the decimal point'
+                '(required only for `number` fields, forbidden for others) Number between 0-4 to set the amount of digits after the decimal point'
+            )
+    ),
+    relatedObjectType: z.optional(
+        z
+            .int32()
+            .describe(
+                '(required only for `lookup` fields, forbidden for others) The number of the object type this field will relate records from.'
             )
     ),
 });
