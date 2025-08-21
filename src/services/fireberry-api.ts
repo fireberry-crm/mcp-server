@@ -28,6 +28,7 @@ interface FireberryError {
         | `Invalid field name: '${string}'`
         | 'The request is invalid.'
         | 'An error has occurred.'
+        | 'Invalid Options' //picklist
     >;
 }
 function isFireberryError(error: unknown): error is FireberryError {
@@ -238,5 +239,7 @@ function createFieldBody(fieldData: CreateFieldInputSchema<FieldTypeNamesForCrea
             return { fieldName: fieldData.fieldName, label: fieldData.label, precision: fieldData.precision };
         case FieldTypeNames.lookup:
             return { fieldName: fieldData.fieldName, label: fieldData.label, relatedObjectType: fieldData.relatedObjectType };
+        case FieldTypeNames.picklist:
+            return { fieldName: fieldData.fieldName, label: fieldData.label, options: fieldData.options };
     }
 }

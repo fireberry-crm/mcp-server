@@ -11,11 +11,11 @@ export const FieldTypeNames = {
     date: 'date',
     dateTime: 'datetime',
     lookup: 'lookup',
+    picklist: 'picklist',
     // TODO: add these back when implemented
     // html: 'html',
     // summary: 'summary',
     // formula: 'formula',
-    // picklist: 'picklist',
 } as const;
 
 export type FieldTypeNamesForCreate = (typeof FieldTypeNames)[keyof typeof FieldTypeNames];
@@ -62,6 +62,18 @@ const lookupFieldSchema = baseFieldSchema.extend({
     relatedObjectType: z.int32().describe('The number of the object type this field will relate records from.'),
 });
 
+const picklistOptionSchema = z.object({
+    order: z.int32().describe('Number from lowest (top) to highest (bottom) to set the order. Start at 1.'),
+    color: z.string().describe('Set a hex color code, start with #. Defaults as black.'),
+    label: z.string().describe('The name displayed for this option.'),
+    value: z.int32().describe('The whole number used to identify this option, must be unique.'),
+});
+
+const picklistFieldSchema = baseFieldSchema.extend({
+    fieldType: z.literal(FieldTypeNames.picklist).describe('The type of field to create'),
+    options: z.array(picklistOptionSchema).nonempty().describe('The values of the picklist'),
+});
+
 const numberFieldSchema = baseFieldSchema.extend({
     fieldType: z.literal(FieldTypeNames.number).describe('The type of field to create'),
     precision: z.int().min(0).max(4).default(0).describe('Number between 0-4 to set the amount of digits after the decimal point'),
@@ -77,6 +89,7 @@ export const fieldCreateSchemaForCall = z.discriminatedUnion('fieldType', [
     urlFieldSchema,
     textareaFieldSchema,
     lookupFieldSchema,
+    picklistFieldSchema,
 ]);
 export const fieldCreateSchemaForRegister = baseFieldSchema.extend({
     fieldType: z.optional(z.string().describe(`REQUIRED The type of field to create ${Object.values(FieldTypeNames).join(',')}`)),
@@ -87,7 +100,7 @@ export const fieldCreateSchemaForRegister = baseFieldSchema.extend({
             .max(4)
             .default(0)
             .describe(
-                '(required only for `number` fields, forbidden for others) Number between 0-4 to set the amount of digits after the decimal point'
+                'optional only for `number` fields, forbidden for others) Number between 0-4 to set the amount of digits after the decimal point'
             )
     ),
     relatedObjectType: z.optional(
@@ -96,6 +109,12 @@ export const fieldCreateSchemaForRegister = baseFieldSchema.extend({
             .describe(
                 '(required only for `lookup` fields, forbidden for others) The number of the object type this field will relate records from.'
             )
+    ),
+    options: z.optional(
+        z
+            .array(picklistOptionSchema)
+            .nonempty()
+            .describe('(required only for `picklist` fields, forbidden for others) The values of the picklist')
     ),
 });
 
