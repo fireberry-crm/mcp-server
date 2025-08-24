@@ -10,19 +10,15 @@
     },
     "private": true,
     "scripts": {
-        "dev": "bun run --watch src/stdio.ts",
-        "dev:tsc": "tsc --watch --project tsconfig.prod.json",
-        "dev:stdio": "bun run --watch src/stdio.ts",
+        "dev": "tsc --watch --project tsconfig.prod.json",
         "check": "tsc --noEmit && eslint",
-        "build:tsc": "tsc --project tsconfig.prod.json",
+        "build": "tsc --project tsconfig.prod.json",
         "lint": "eslint",
         "typecheck": "tsc --noEmit",
         "lint:fix": "eslint --fix",
         "format": "prettier --write ./**/*.{ts,js,mjs}",
         "inspect": "mcp-inspector",
-        "build": "bun build src/stdio.ts --outdir dist --target node",
         "start": "node dist/stdio.js",
-        "start:stdio": "node dist/stdio.js",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "contributors": [
