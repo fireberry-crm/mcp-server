@@ -3,7 +3,7 @@ import type { z } from 'zod';
 /**
  * Shared types for the Fireberry CRM MCP Server
  */
-export type ConvertZodObjectToJsonSchema<T extends z.ZodObject> = {
+type ConvertZodObjectToJsonSchema<T extends z.ZodObject> = {
     $schema: 'https://json-schema.org/draft/2020-12/schema';
     type: T['type'];
     properties: {
