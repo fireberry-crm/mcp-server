@@ -1,7 +1,7 @@
 {
     "name": "@fireberry/mcp-server",
     "description": "MCP Server for hassle-free usage of Fireberry's API.",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "main": "dist/stdio.js",
     "module": "src/stdio.ts",
     "type": "module",
