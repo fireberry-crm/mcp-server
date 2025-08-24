@@ -2,13 +2,13 @@ import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { CallToolRequestSchema, ListToolsRequestSchema } from '@modelcontextprotocol/sdk/types.js';
 
 import {
-    metadataFieldsSchema,
-    metadataPicklistSchema,
-    recordCreateSchema,
-    recordUpdateSchema,
-    objectCreateSchema,
+    metadataFieldsToolInputSchema,
+    metadataPicklistToolInputSchema,
+    recordCreateToolInputSchema,
+    recordUpdateToolInputSchema,
+    objectCreateToolInputSchema,
     registerTools,
-    fieldCreateSchemaForCall,
+    fieldCreateToolInputSchemaForCall,
 } from './tools/registerTools.js';
 import { logger } from './utils/index.js';
 import { SERVER_DESCRIPTION, SERVER_NAME, ToolNames, VERSION, type ToolName } from './constants.js';
@@ -70,7 +70,7 @@ export function createServer() {
                 return createToolResponse(metadataObjects);
             }
             case ToolNames.metadataFields: {
-                const parsedArgs = metadataFieldsSchema.safeParse(args);
+                const parsedArgs = metadataFieldsToolInputSchema.safeParse(args);
 
                 if (!parsedArgs.success) return createToolResponseParsingError(`Error parsing object type arguments`, parsedArgs.error);
 
@@ -79,7 +79,7 @@ export function createServer() {
                 return createToolResponse(metadataFields);
             }
             case ToolNames.metadataPicklist: {
-                const parsedArgs = metadataPicklistSchema.safeParse(args);
+                const parsedArgs = metadataPicklistToolInputSchema.safeParse(args);
                 if (!parsedArgs.success) return createToolResponseParsingError(`Error parsing picklist argument`, parsedArgs.error);
 
                 const { objectType, fieldName } = parsedArgs.data;
@@ -87,7 +87,7 @@ export function createServer() {
                 return createToolResponse(picklist);
             }
             case ToolNames.recordCreate: {
-                const parsedArgs = recordCreateSchema.safeParse(args);
+                const parsedArgs = recordCreateToolInputSchema.safeParse(args);
                 if (!parsedArgs.success) return createToolResponseParsingError(`Error parsing record creation arguments`, parsedArgs.error);
 
                 const { objectType, fields } = parsedArgs.data;
@@ -95,7 +95,7 @@ export function createServer() {
                 return createToolResponse(record);
             }
             case ToolNames.recordUpdate: {
-                const parsedArgs = recordUpdateSchema.safeParse(args);
+                const parsedArgs = recordUpdateToolInputSchema.safeParse(args);
                 if (!parsedArgs.success) return createToolResponseParsingError(`Error parsing record update arguments`, parsedArgs.error);
 
                 const { objectType, recordId, fields } = parsedArgs.data;
@@ -103,7 +103,7 @@ export function createServer() {
                 return createToolResponse(record);
             }
             case ToolNames.objectCreate: {
-                const parsedArgs = objectCreateSchema.safeParse(args);
+                const parsedArgs = objectCreateToolInputSchema.safeParse(args);
                 if (!parsedArgs.success) return createToolResponseParsingError(`Error parsing object creation arguments`, parsedArgs.error);
 
                 const { name, collectionname } = parsedArgs.data;
@@ -111,7 +111,7 @@ export function createServer() {
                 return createToolResponse(result);
             }
             case ToolNames.fieldCreate: {
-                const parsedArgs = fieldCreateSchemaForCall.safeParse(args);
+                const parsedArgs = fieldCreateToolInputSchemaForCall.safeParse(args);
                 if (!parsedArgs.success) return createToolResponseParsingError(`Error parsing field creation arguments`, parsedArgs.error);
 
                 const result = await fireberryApi.createField(parsedArgs.data);

@@ -1,1 +1,1 @@
-export { objectCreateSchema, CreateObjectSchema, type CreateObject } from './create.js';
+export { objectCreateToolInputSchema, objectCreateResponseSchema, type CreateObject } from './create.js';

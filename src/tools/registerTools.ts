@@ -1,19 +1,19 @@
 import { zodToJsonSchema } from '../utils/index.js';
 import { ToolNames } from '../constants.js';
-import { metadataPicklistSchema, metadataObjectsSchema, metadataFieldsSchema } from './metadata/index.js';
-import { recordCreateSchema, recordUpdateSchema } from './record/index.js';
-import { objectCreateSchema } from './object/index.js';
-import { fieldCreateSchemaForRegister, fieldCreateSchemaForCall } from './field/index.js';
+import { metadataPicklistToolInputSchema, metadataObjectsToolInputSchema, metadataFieldsToolInputSchema } from './metadata/index.js';
+import { recordCreateToolInputSchema, recordUpdateToolInputSchema } from './record/index.js';
+import { objectCreateToolInputSchema } from './object/index.js';
+import { fieldCreateToolInputSchemaForRegister, fieldCreateToolInputSchemaForCall } from './field/index.js';
 
 export {
-    metadataPicklistSchema,
-    metadataObjectsSchema,
-    metadataFieldsSchema,
-    recordCreateSchema,
-    recordUpdateSchema,
-    objectCreateSchema,
-    fieldCreateSchemaForRegister,
-    fieldCreateSchemaForCall,
+    metadataPicklistToolInputSchema,
+    metadataObjectsToolInputSchema,
+    metadataFieldsToolInputSchema,
+    recordCreateToolInputSchema,
+    recordUpdateToolInputSchema,
+    objectCreateToolInputSchema,
+    fieldCreateToolInputSchemaForRegister,
+    fieldCreateToolInputSchemaForCall,
 };
 
 /**
@@ -25,37 +25,37 @@ export async function registerTools() {
             {
                 name: ToolNames.metadataObjects,
                 description: 'get all fireberry crm object types',
-                inputSchema: zodToJsonSchema(metadataObjectsSchema),
+                inputSchema: zodToJsonSchema(metadataObjectsToolInputSchema),
             },
             {
                 name: ToolNames.metadataFields,
                 description: 'get all fields by of a crm object',
-                inputSchema: zodToJsonSchema(metadataFieldsSchema),
+                inputSchema: zodToJsonSchema(metadataFieldsToolInputSchema),
             },
             {
                 name: ToolNames.metadataPicklist,
                 description: 'get all picklist options of a picklist type field',
-                inputSchema: zodToJsonSchema(metadataPicklistSchema),
+                inputSchema: zodToJsonSchema(metadataPicklistToolInputSchema),
             },
             {
                 name: ToolNames.recordCreate,
                 description: 'create a new crm record from a specified object type',
-                inputSchema: zodToJsonSchema(recordCreateSchema),
+                inputSchema: zodToJsonSchema(recordCreateToolInputSchema),
             },
             {
                 name: ToolNames.recordUpdate,
                 description: 'update a crm record',
-                inputSchema: zodToJsonSchema(recordUpdateSchema),
+                inputSchema: zodToJsonSchema(recordUpdateToolInputSchema),
             },
             {
                 name: ToolNames.objectCreate,
                 description: 'create a new crm object type',
-                inputSchema: zodToJsonSchema(objectCreateSchema),
+                inputSchema: zodToJsonSchema(objectCreateToolInputSchema),
             },
             {
                 name: ToolNames.fieldCreate,
                 description: 'create a new text field in a crm object',
-                inputSchema: zodToJsonSchema(fieldCreateSchemaForRegister),
+                inputSchema: zodToJsonSchema(fieldCreateToolInputSchemaForRegister),
             },
         ],
     } as const satisfies {

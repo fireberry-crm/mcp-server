@@ -1,4 +1,11 @@
-import { recordCreateSchema, CreateRecordSchema, type CreateRecord } from './create.js';
-import { recordUpdateSchema, UpdateRecordResponseSchema, type UpdateRecord } from './update.js';
+import { recordCreateToolInputSchema, recordCreateResponseSchema, type CreateRecord } from './create.js';
+import { recordUpdateToolInputSchema, recordUpdateResponseSchema, type UpdateRecord } from './update.js';
 
-export { recordCreateSchema, recordUpdateSchema, CreateRecordSchema, UpdateRecordResponseSchema, type CreateRecord, type UpdateRecord };
+export {
+    recordCreateToolInputSchema,
+    recordUpdateToolInputSchema,
+    recordCreateResponseSchema,
+    recordUpdateResponseSchema,
+    type CreateRecord,
+    type UpdateRecord,
+};
