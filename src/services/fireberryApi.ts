@@ -198,7 +198,6 @@ export const fireberryApi = {
             return { error: 'Unknown error' };
         }
     },
-
     createField: async (fieldData: CreateFieldInputSchema<FieldTypeNamesForCreate>): Promise<CreateField | { error: string }> => {
         try {
             const endpoint = `${env.BASE_URL}/api/v2/system-field/${String(fieldData.objectType)}/${fieldData.fieldType}`;
