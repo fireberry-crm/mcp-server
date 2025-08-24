@@ -6,6 +6,8 @@ export const ToolNames = {
     metadataPicklist: 'metadata_picklist',
     recordCreate: 'record_create',
     recordUpdate: 'record_update',
+    objectCreate: 'object_create',
+    fieldCreate: 'field_create',
 } as const;
 export type ToolName = (typeof ToolNames)[keyof typeof ToolNames];
 
@@ -38,3 +40,12 @@ type ReverseFieldTypeMap = Prettify<
 export const ReverseFieldTypes: ReverseFieldTypeMap = Object.fromEntries(
     Object.entries(FieldTypes).map(([key, value]) => [value, key])
 ) as ReverseFieldTypeMap;
+
+/** The maximum length of a label that our API supports */
+export const LABEL_MAX_LENGTH_LIMIT = 200;
+
+/** The maximum length of an object name that our API supports */
+export const MAX_LENGTH_OBJECT_NAME = 100;
+
+/** The maximum length of a field name that our API supports */
+export const FIELD_NAME_MAX_LENGTH_LIMIT = 50;

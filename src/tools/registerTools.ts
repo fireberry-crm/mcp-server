@@ -1,9 +1,19 @@
 import { zodToJsonSchema } from '../utils/index.js';
 import { ToolNames } from '../constants.js';
-import { metadataPicklistSchema, metadataObjectsSchema, metadataFieldsSchema } from './metadata';
-import { recordCreateSchema, recordUpdateSchema } from './record';
+import { metadataPicklistSchema, metadataObjectsSchema, metadataFieldsSchema } from './metadata/index.js';
+import { recordCreateSchema, recordUpdateSchema } from './record/index.js';
+import { objectCreateSchema } from './object/index.js';
+import { fieldCreateSchema } from './field/index.js';
 
-export { metadataPicklistSchema, metadataObjectsSchema, metadataFieldsSchema, recordCreateSchema, recordUpdateSchema };
+export {
+    metadataPicklistSchema,
+    metadataObjectsSchema,
+    metadataFieldsSchema,
+    recordCreateSchema,
+    recordUpdateSchema,
+    objectCreateSchema,
+    fieldCreateSchema,
+};
 
 /**
  * Register all tools and return the tools list
@@ -35,6 +45,16 @@ export async function registerTools() {
                 name: ToolNames.recordUpdate,
                 description: 'update a crm record',
                 inputSchema: zodToJsonSchema(recordUpdateSchema),
+            },
+            {
+                name: ToolNames.objectCreate,
+                description: 'create a new crm object type',
+                inputSchema: zodToJsonSchema(objectCreateSchema),
+            },
+            {
+                name: ToolNames.fieldCreate,
+                description: 'create a new text field in a crm object',
+                inputSchema: zodToJsonSchema(fieldCreateSchema),
             },
         ],
     } as const satisfies {
