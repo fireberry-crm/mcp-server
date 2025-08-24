@@ -36,7 +36,7 @@ Add to your MCP configuration file:
             "command": "npx",
             "args": ["-y", "@fireberry/mcp-server"],
             "env": {
-                "FIREBERRY_TOKEN_ID": "your-token-here"
+                "FIREBERRY_TOKEN_ID": "<your-token-here>"
             }
         }
     }
@@ -52,7 +52,7 @@ Add to your MCP configuration file:
             "command": "bunx",
             "args": ["@fireberry/mcp-server"],
             "env": {
-                "FIREBERRY_TOKEN_ID": "your-token-here"
+                "FIREBERRY_TOKEN_ID": "<your-token-here>"
             }
         }
     }
@@ -61,7 +61,7 @@ Add to your MCP configuration file:
 
 ### 3. Tool-Specific Setup
 
-<details open>
+<details>
 <summary><strong>Claude Desktop</strong></summary>
 
 Update `claude_desktop_config.json` [from MCP official docs](https://modelcontextprotocol.io/quickstart/user):
@@ -69,11 +69,11 @@ Update `claude_desktop_config.json` [from MCP official docs](https://modelcontex
 ```json
 {
     "mcpServers": {
-        "fireberry": {
+        "fireberry-crm": {
             "command": "npx",
             "args": ["-y", "@fireberry/mcp-server"],
             "env": {
-                "FIREBERRY_TOKEN_ID": "your-token-here"
+                "FIREBERRY_TOKEN_ID": "<your-token-here>"
             }
         }
     }
@@ -91,11 +91,11 @@ Add to `.vscode/settings.json`:
 {
     "github.copilot.advanced": {
         "mcpServers": {
-            "fireberry": {
+            "fireberry-crm": {
                 "command": "npx",
                 "args": ["-y", "@fireberry/mcp-server"],
                 "env": {
-                    "FIREBERRY_TOKEN_ID": "your-token-here"
+                    "FIREBERRY_TOKEN_ID": "<your-token-here>"
                 }
             }
         }
@@ -112,11 +112,11 @@ Navigate to Settings → MCP Servers and add:
 
 ```json
 {
-    "fireberry": {
+    "fireberry-crm": {
         "command": "npx",
         "args": ["-y", "@fireberry/mcp-server"],
         "env": {
-            "FIREBERRY_TOKEN_ID": "your-token-here"
+            "FIREBERRY_TOKEN_ID": "<your-token-here>"
         }
     }
 }
