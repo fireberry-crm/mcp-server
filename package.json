@@ -8,6 +8,13 @@
     "bin": {
         "mcp-fireberry": "dist/stdio.js"
     },
+    "files": [
+        "dist/**/*",
+        "src/**/*",
+        "docs/**/*",
+        "LICENSE.md",
+        "README.md"
+    ],
     "private": true,
     "scripts": {
         "dev": "tsc --watch --project tsconfig.prod.json",
@@ -58,5 +65,11 @@
     "engines": {
         "node": ">=18",
         "npm": ">=8.0.0"
-    }
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/fireberry-crm/mcp-server.git"
+    },
+    "homepage": "https://github.com/fireberry-crm/mcp-server",
+    "license": "MIT"
 }
