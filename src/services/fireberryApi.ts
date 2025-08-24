@@ -1,8 +1,8 @@
 import { z } from 'zod';
-import { logger } from '../utils';
-import { env } from '../env';
-import type { AutocompleteString } from '../types';
-import { ReverseFieldTypes } from '../constants';
+import { logger } from '../utils/index.js';
+import { env } from '../env.js';
+import type { AutocompleteString } from '../types/index.js';
+import { ReverseFieldTypes } from '../constants.js';
 import {
     MetadataObjectSchema,
     type MetadataObject,
@@ -10,11 +10,11 @@ import {
     MetadataPicklistFromAPI,
     type MetadataField,
     type MetadataPicklist,
-} from '../tools/metadata';
-import { CreateRecordSchema, UpdateRecordResponseSchema, type CreateRecord, type UpdateRecord } from '../tools/record';
-import { CreateObjectSchema, type CreateObject } from '../tools/object';
-import { CreateFieldSchema, type CreateField } from '../tools/field';
-import { FieldTypeNames, type CreateFieldInputSchema, type FieldTypeNamesForCreate } from '../tools/field/create';
+} from '../tools/metadata/index.js';
+import { CreateRecordSchema, UpdateRecordResponseSchema, type CreateRecord, type UpdateRecord } from '../tools/record/index.js';
+import { CreateObjectSchema, type CreateObject } from '../tools/object/index.js';
+import { CreateFieldSchema, type CreateField } from '../tools/field/index.js';
+import { FieldTypeNames, type CreateFieldInputSchema, type FieldTypeNamesForCreate } from '../tools/field/create.js';
 
 const headers = {
     'Content-Type': 'application/json',

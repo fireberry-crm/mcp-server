@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { FieldTypes, type FieldTypeName } from '../../constants';
+import { FieldTypes, type FieldTypeName } from '../../constants.js';
 
 export const metadataPicklistSchema = z.object({
     objectType: z.int().describe('The object type to get metadata for'),

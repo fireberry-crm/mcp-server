@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { FIELD_NAME_MAX_LENGTH_LIMIT, LABEL_MAX_LENGTH_LIMIT } from '../../constants';
+import { FIELD_NAME_MAX_LENGTH_LIMIT, LABEL_MAX_LENGTH_LIMIT } from '../../constants.js';
 
 export const FieldTypeNames = {
     text: 'text',
