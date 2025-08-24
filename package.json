@@ -1,0 +1,60 @@
+{
+    "name": "@fireberry/mcp-server",
+    "description": "MCP Server for hassle-free usage of Fireberry's API.",
+    "version": "0.0.1",
+    "main": "dist/stdio.js",
+    "module": "src/stdio.ts",
+    "type": "module",
+    "bin": {
+        "mcp-fireberry": "dist/stdio.js"
+    },
+    "private": true,
+    "scripts": {
+        "dev": "bun run --watch src/stdio.ts",
+        "dev:stdio": "bun run --watch src/stdio.ts",
+        "lint": "eslint",
+        "lint:fix": "eslint --fix",
+        "format": "prettier --write ./**/*.{ts,js,mjs}",
+        "inspect": "mcp-inspector",
+        "build": "bun build src/stdio.ts --outdir dist --target node",
+        "start": "node dist/stdio.js",
+        "start:stdio": "node dist/stdio.js",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "contributors": [
+        {
+            "name": "Aviv Nakar",
+            "url": "https://github.com/avivnakar",
+            "email": "aviv.nakar@fireberry.com"
+        }
+    ],
+    "dependencies": {
+        "@modelcontextprotocol/sdk": "^1.17.0",
+        "@types/cors": "^2.8.19",
+        "@types/express": "^5.0.3",
+        "cors": "^2.8.5",
+        "express": "^5.1.0",
+        "zod": "^4.0.17"
+    },
+    "devDependencies": {
+        "@eslint/js": "^9.33.0",
+        "@modelcontextprotocol/inspector": "latest",
+        "@types/bun": "latest",
+        "@types/node": "^20.0.0",
+        "eslint": "^9.33.0",
+        "eslint-config-prettier": "^10.1.8",
+        "eslint-plugin-prettier": "^5.5.4",
+        "prettier": "^3.6.2",
+        "typescript-eslint": "^8.39.1"
+    },
+    "peerDependencies": {
+        "typescript": "^5"
+    },
+    "optionalDependencies": {
+        "dotenv": "^17.2.1"
+    },
+    "engines": {
+        "node": ">=16.0.0",
+        "npm": ">=8.0.0"
+    }
+}
