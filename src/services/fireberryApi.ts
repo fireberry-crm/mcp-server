@@ -4,16 +4,16 @@ import { env } from '../env.js';
 import type { AutocompleteString } from '../types/index.js';
 import { ReverseFieldTypes } from '../constants.js';
 import {
-    MetadataObjectSchema,
+    metadataObjectsResponseSchema,
+    metadataFieldResponseSchema,
     type MetadataObject,
-    MetadataFieldFromAPI,
-    MetadataPicklistFromAPI,
+    metadataPicklistResponseSchema,
     type MetadataField,
     type MetadataPicklist,
 } from '../tools/metadata/index.js';
-import { CreateRecordSchema, UpdateRecordResponseSchema, type CreateRecord, type UpdateRecord } from '../tools/record/index.js';
-import { CreateObjectSchema, type CreateObject } from '../tools/object/index.js';
-import { CreateFieldSchema, type CreateField } from '../tools/field/index.js';
+import { recordCreateResponseSchema, recordUpdateResponseSchema, type CreateRecord, type UpdateRecord } from '../tools/record/index.js';
+import { objectCreateResponseSchema, type CreateObject } from '../tools/object/index.js';
+import { fieldCreateResponseSchema, type CreateField } from '../tools/field/index.js';
 import { FieldTypeNames, type CreateFieldInputSchema, type FieldTypeNamesForCreate } from '../tools/field/create.js';
 
 const headers = {
@@ -67,7 +67,7 @@ export const fireberryApi = {
             const response = await fetch(endpointV1, { headers });
             const data = await response.json();
 
-            const parsedData = getFireberryMetadataResponseSchema(z.array(MetadataObjectSchema).nonempty()).safeParse(data);
+            const parsedData = getFireberryMetadataResponseSchema(z.array(metadataObjectsResponseSchema).nonempty()).safeParse(data);
             if (!parsedData.success) {
                 logger.error('Failed to parse metadata objects response:', parsedData.error);
                 return { error: 'Invalid response format from API' };
@@ -90,7 +90,7 @@ export const fireberryApi = {
             const response = await fetch(endpoint, { headers });
             const data = await response.json();
 
-            const parsedData = getFireberryMetadataResponseSchema(z.array(MetadataFieldFromAPI).nonempty()).safeParse(data);
+            const parsedData = getFireberryMetadataResponseSchema(z.array(metadataFieldResponseSchema).nonempty()).safeParse(data);
             if (!parsedData.success) {
                 logger.error('Failed to parse metadata fields response:', parsedData.error);
                 return { error: 'Invalid response format from API' };
@@ -114,7 +114,7 @@ export const fireberryApi = {
             const endpoint = `${env.BASE_URL}/metadata/records/${String(objectType)}/fields/${fieldname}/values`;
             const response = await fetch(endpoint, { headers });
             const data = await response.json();
-            const parsedData = getFireberryMetadataResponseSchema(MetadataPicklistFromAPI).safeParse(data);
+            const parsedData = getFireberryMetadataResponseSchema(metadataPicklistResponseSchema).safeParse(data);
             if (!parsedData.success) {
                 logger.error(JSON.stringify(data, null, 2));
                 if (isFireberryError(data)) return { error: data.Message };
@@ -138,7 +138,7 @@ export const fireberryApi = {
             const endpoint = `${env.BASE_URL}/api/v2/record/${String(objectType)}`;
             const response = await fetch(endpoint, { method: 'POST', headers, body: JSON.stringify(fields) });
             const data = await response.json();
-            const parsedData = CreateRecordSchema.safeParse(data);
+            const parsedData = recordCreateResponseSchema.safeParse(data);
             if (!parsedData.success) {
                 if (isFireberryError(data)) return { error: data.Message };
                 else {
@@ -161,7 +161,7 @@ export const fireberryApi = {
             const endpoint = `${env.BASE_URL}/api/v2/record/${String(objectType)}/${recordId}`;
             const response = await fetch(endpoint, { method: 'PUT', headers, body: JSON.stringify(fields) });
             const data = await response.json();
-            const parsedData = UpdateRecordResponseSchema.safeParse(data);
+            const parsedData = recordUpdateResponseSchema.safeParse(data);
             if (!parsedData.success) {
                 if (isFireberryError(data)) return { error: data.Message };
                 else {
@@ -186,7 +186,7 @@ export const fireberryApi = {
                 return { error: data.Message };
             }
 
-            const parsedData = CreateObjectSchema.safeParse(data);
+            const parsedData = objectCreateResponseSchema.safeParse(data);
             if (!parsedData.success) {
                 logger.error('Failed to parse create object response:', parsedData.error);
                 return { error: 'Invalid response format from API' };
@@ -210,7 +210,7 @@ export const fireberryApi = {
                 return { error: data.Message };
             }
 
-            const parsedData = CreateFieldSchema.safeParse(data);
+            const parsedData = fieldCreateResponseSchema.safeParse(data);
             if (!parsedData.success) {
                 logger.error('Failed to parse create field response:', parsedData.error);
                 return { error: 'Invalid response format from API' };
