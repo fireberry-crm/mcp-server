@@ -14,6 +14,7 @@ import {
 import { CreateRecordSchema, UpdateRecordResponseSchema, type CreateRecord, type UpdateRecord } from '../tools/record';
 import { CreateObjectSchema, type CreateObject } from '../tools/object';
 import { CreateFieldSchema, type CreateField } from '../tools/field';
+import { FieldTypeNames, type CreateFieldInputSchema, type FieldTypeNamesForCreate } from '../tools/field/create';
 
 const headers = {
     'Content-Type': 'application/json',
@@ -27,6 +28,7 @@ interface FireberryError {
         | `Invalid field name: '${string}'`
         | 'The request is invalid.'
         | 'An error has occurred.'
+        | 'Invalid Options' //picklist
     >;
 }
 function isFireberryError(error: unknown): error is FireberryError {
@@ -196,12 +198,15 @@ export const fireberryApi = {
             return { error: 'Unknown error' };
         }
     },
-    createTextField: async (objectType: number, label: string, fieldName: string | undefined): Promise<CreateField | { error: string }> => {
+
+    createField: async (fieldData: CreateFieldInputSchema<FieldTypeNamesForCreate>): Promise<CreateField | { error: string }> => {
         try {
-            const endpoint = `${env.BASE_URL}/api/v2/system-field/${String(objectType)}/text`;
-            const response = await fetch(endpoint, { method: 'POST', headers, body: JSON.stringify({ fieldName, label }) });
+            const endpoint = `${env.BASE_URL}/api/v2/system-field/${String(fieldData.objectType)}/${fieldData.fieldType}`;
+            const body = createFieldBody(fieldData);
+
+            const response = await fetch(endpoint, { method: 'POST', headers, body: JSON.stringify(body) });
             const data = await response.json();
-            logger.debug(JSON.stringify(data, null, 2));
+
             if (isFireberryError(data)) {
                 return { error: data.Message };
             }
@@ -219,3 +224,22 @@ export const fireberryApi = {
         }
     },
 };
+
+function createFieldBody(fieldData: CreateFieldInputSchema<FieldTypeNamesForCreate>) {
+    switch (fieldData.fieldType) {
+        case FieldTypeNames.text:
+        case FieldTypeNames.date:
+        case FieldTypeNames.dateTime:
+        case FieldTypeNames.phoneNumber:
+        case FieldTypeNames.emailAddress:
+        case FieldTypeNames.url:
+        case FieldTypeNames.textarea:
+            return { fieldName: fieldData.fieldName, label: fieldData.label };
+        case FieldTypeNames.number:
+            return { fieldName: fieldData.fieldName, label: fieldData.label, precision: fieldData.precision };
+        case FieldTypeNames.lookup:
+            return { fieldName: fieldData.fieldName, label: fieldData.label, relatedObjectType: fieldData.relatedObjectType };
+        case FieldTypeNames.picklist:
+            return { fieldName: fieldData.fieldName, label: fieldData.label, options: fieldData.options };
+    }
+}

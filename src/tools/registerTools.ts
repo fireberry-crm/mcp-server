@@ -3,7 +3,7 @@ import { ToolNames } from '../constants.js';
 import { metadataPicklistSchema, metadataObjectsSchema, metadataFieldsSchema } from './metadata/index.js';
 import { recordCreateSchema, recordUpdateSchema } from './record/index.js';
 import { objectCreateSchema } from './object/index.js';
-import { fieldCreateSchema } from './field/index.js';
+import { fieldCreateSchemaForRegister, fieldCreateSchemaForCall } from './field/index.js';
 
 export {
     metadataPicklistSchema,
@@ -12,7 +12,8 @@ export {
     recordCreateSchema,
     recordUpdateSchema,
     objectCreateSchema,
-    fieldCreateSchema,
+    fieldCreateSchemaForRegister,
+    fieldCreateSchemaForCall,
 };
 
 /**
@@ -54,7 +55,7 @@ export async function registerTools() {
             {
                 name: ToolNames.fieldCreate,
                 description: 'create a new text field in a crm object',
-                inputSchema: zodToJsonSchema(fieldCreateSchema),
+                inputSchema: zodToJsonSchema(fieldCreateSchemaForRegister),
             },
         ],
     } as const satisfies {
