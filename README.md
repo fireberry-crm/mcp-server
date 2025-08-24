@@ -61,7 +61,7 @@ Add to your MCP configuration file:
 
 ### 3. Tool-Specific Setup
 
-<details>
+<details open>
 <summary><strong>Claude Desktop</strong></summary>
 
 Update `claude_desktop_config.json` [from MCP official docs](https://modelcontextprotocol.io/quickstart/user):
