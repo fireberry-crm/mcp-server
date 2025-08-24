@@ -1,17 +1,15 @@
-import { metadataObjectsSchema, MetadataObjectSchema, type MetadataObject } from './objects.js';
-import { metadataFieldsSchema, MetadataFieldBaseSchema, MetadataFieldFromAPI, type MetadataField } from './fields.js';
-import { metadataPicklistSchema, MetadataPicklistBaseSchema, MetadataPicklistFromAPI, type MetadataPicklist } from './picklist.js';
+import { metadataObjectsToolInputSchema, metadataObjectsResponseSchema, type MetadataObject } from './objects.js';
+import { metadataFieldsToolInputSchema, metadataFieldResponseSchema, type MetadataField } from './fields.js';
+import { metadataPicklistToolInputSchema, metadataPicklistResponseSchema, type MetadataPicklist } from './picklist.js';
 
 export {
-    metadataObjectsSchema,
-    MetadataObjectSchema,
+    metadataObjectsToolInputSchema,
+    metadataObjectsResponseSchema,
     type MetadataObject,
-    metadataFieldsSchema,
-    MetadataFieldBaseSchema,
-    MetadataFieldFromAPI,
+    metadataFieldsToolInputSchema,
+    metadataFieldResponseSchema,
     type MetadataField,
-    metadataPicklistSchema,
-    MetadataPicklistBaseSchema,
-    MetadataPicklistFromAPI,
+    metadataPicklistToolInputSchema,
+    metadataPicklistResponseSchema,
     type MetadataPicklist,
 };

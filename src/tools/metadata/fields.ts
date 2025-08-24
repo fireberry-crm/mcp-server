@@ -1,20 +1,20 @@
 import { z } from 'zod';
 import { FieldTypes, type FieldTypeName } from '../../constants.js';
 
-export const metadataFieldsSchema = z.object({
+export const metadataFieldsToolInputSchema = z.object({
     objectType: z.int().describe('The object type to get metadata for'),
 });
 
-export const MetadataFieldBaseSchema = z.object({
+const metadataFieldBaseSchema = z.object({
     label: z.string(),
     fieldName: z.string(),
     systemName: z.string(),
 });
 
-export const MetadataFieldFromAPI = MetadataFieldBaseSchema.extend({
+export const metadataFieldResponseSchema = metadataFieldBaseSchema.extend({
     systemFieldTypeId: z.enum(FieldTypes),
 });
 
-export interface MetadataField extends z.infer<typeof MetadataFieldBaseSchema> {
+export interface MetadataField extends z.infer<typeof metadataFieldBaseSchema> {
     fieldType: FieldTypeName;
 }
