@@ -2,10 +2,7 @@ import { z } from 'zod';
 import { FieldTypes, type FieldTypeName } from '../../constants';
 
 export const metadataPicklistSchema = z.object({
-    objectType: z
-        .string()
-        .regex(/^\d+$/, { message: 'objectType must be a string containing only digits' })
-        .describe('The object type to get metadata for'),
+    objectType: z.int().describe('The object type to get metadata for'),
     fieldName: z.string().describe('The picklist field name to get the values for'),
 });
 

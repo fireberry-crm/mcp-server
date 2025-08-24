@@ -1,13 +1,22 @@
 // @ts-check
 import eslint from '@eslint/js';
 import prettierRecommended from 'eslint-plugin-prettier/recommended';
+import importPlugin from 'eslint-plugin-import';
 import tseslint from 'typescript-eslint';
 
 const tsESLintConfig = tseslint.config(
     {
         ignores: ['dist/', 'node_modules/', '**/*.d.ts', 'coverage/'],
     },
-
+    {
+        settings: {
+            'import/resolver': {
+                typescript: true,
+                node: true,
+                bun: true,
+            },
+        },
+    },
     eslint.configs.recommended, // base ESLint recommended
     {
         files: ['**/*.{ts,cts,mts,js,cjs,mjs}'],
@@ -40,6 +49,13 @@ const tsESLintConfig = tseslint.config(
             '@typescript-eslint/strict-boolean-expressions': 'error',
             'prettier/prettier': 'error', // formatting as lint errors
         },
+    },
+    {
+        files: ['**/*.{ts,cts,mts}'],
+        rules: {
+            'import/no-cycle': 'error',
+        },
+        extends: [importPlugin.flatConfigs.recommended, importPlugin.flatConfigs.typescript],
     },
     prettierRecommended // disables rules already handled by Prettier
 );
