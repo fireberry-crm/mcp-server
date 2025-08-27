@@ -12,7 +12,7 @@ import {
 } from './tools/registerTools.js';
 import { logger } from './utils/index.js';
 import { SERVER_DESCRIPTION, SERVER_NAME, ToolNames, VERSION, type ToolName } from './constants.js';
-import { fireberryApi } from './services/fireberryApi.js';
+import { getFireberryApi } from './services/fireberryApi.js';
 import { z } from 'zod';
 
 function safeStringify(data: unknown) {
@@ -42,7 +42,7 @@ function createToolResponseParsingError(msg: string, error: z.ZodError) {
 /**
  * Create and configure the MCP server (shared for both stdio and HTTP)
  */
-export function createServer() {
+export function createServer(tokenid: string) {
     const server = new Server(
         {
             name: SERVER_NAME,
@@ -64,6 +64,7 @@ export function createServer() {
     server.setRequestHandler(CallToolRequestSchema, async (request) => {
         const { name, arguments: args } = request.params;
 
+        const fireberryApi = getFireberryApi(tokenid);
         switch (name as ToolName) {
             case ToolNames.metadataObjects: {
                 const metadataObjects = await fireberryApi.getMetadataObjects();
@@ -123,9 +124,9 @@ export function createServer() {
     });
 
     // Cleanup function for proper resource management
-    const cleanup = () => {
+    const cleanup = async () => {
         logger.info('Cleaning up server resources...');
-        // Add any cleanup logic here (close database connections, etc.)
+        await server.close();
     };
 
     return { server, cleanup };
