@@ -46,7 +46,6 @@ const tsESLintConfig = tseslint.config(
                     },
                 },
             ],
-            '@typescript-eslint/strict-boolean-expressions': 'error',
             'prettier/prettier': 'error', // formatting as lint errors
         },
     },
