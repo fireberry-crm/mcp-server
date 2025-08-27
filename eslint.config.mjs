@@ -33,6 +33,7 @@ const tsESLintConfig = tseslint.config(
         },
         rules: {
             '@typescript-eslint/no-explicit-any': 'error', // enforce type safety
+            '@typescript-eslint/no-confusing-void-expression': 'error',
             '@typescript-eslint/no-restricted-types': [
                 'error',
                 {
