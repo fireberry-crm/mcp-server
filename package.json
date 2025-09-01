@@ -2,8 +2,8 @@
     "name": "@fireberry/mcp-server",
     "description": "MCP Server for hassle-free usage of Fireberry's API.",
     "version": "0.0.3",
-    "main": "dist/stdio.js",
-    "module": "src/stdio.ts",
+    "main": "dist/cli.js",
+    "module": "src/cli.ts",
     "type": "module",
     "exports": {
         ".": {
@@ -13,7 +13,7 @@
         }
     },
     "bin": {
-        "mcp-fireberry": "dist/stdio.js"
+        "mcp-fireberry": "dist/cli.js"
     },
     "files": [
         "dist/**/*",
@@ -32,7 +32,7 @@
         "lint:fix": "eslint --fix",
         "format": "prettier --write ./**/*.{ts,js,mjs}",
         "inspect": "mcp-inspector",
-        "start": "node dist/stdio.js",
+        "start": "node dist/cli.js",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "contributors": [

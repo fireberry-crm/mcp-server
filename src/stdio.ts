@@ -7,7 +7,7 @@ import { logger } from './utils/index.js';
 
 logger.info('Starting Fireberry MCP Server (stdio)...');
 
-async function main() {
+export async function main() {
     const transport = new StdioServerTransport();
     const { server, cleanup } = createServer(env.FIREBERRY_TOKEN_ID);
 
@@ -38,7 +38,3 @@ async function main() {
             });
     });
 }
-main().catch((error: unknown) => {
-    logger.error('Server error:', error);
-    process.exit(1);
-});
