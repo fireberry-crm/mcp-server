@@ -5,6 +5,13 @@
     "main": "dist/stdio.js",
     "module": "src/stdio.ts",
     "type": "module",
+    "exports": {
+        ".": {
+            "import": "./dist/index.js",
+            "types": "./dist/index.d.ts",
+            "default": "./src/index.ts"
+        }
+    },
     "bin": {
         "mcp-fireberry": "dist/stdio.js"
     },
@@ -36,17 +43,13 @@
         }
     ],
     "dependencies": {
-        "@modelcontextprotocol/sdk": "^1.17.0",
-        "cors": "^2.8.5",
-        "express": "^5.1.0",
+        "@modelcontextprotocol/sdk": "^1.17.4",
         "zod": "^4.0.17"
     },
     "devDependencies": {
         "@eslint/js": "^9.33.0",
         "@modelcontextprotocol/inspector": "latest",
         "@types/bun": "latest",
-        "@types/cors": "^2.8.19",
-        "@types/express": "^5.0.3",
         "@types/node": "^20.0.0",
         "eslint": "^9.33.0",
         "eslint-config-prettier": "^10.1.8",
