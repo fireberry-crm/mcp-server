@@ -2,7 +2,7 @@ import { z } from 'zod';
 import { FieldTypes, type FieldTypeName } from '../../constants.js';
 
 export const metadataPicklistToolInputSchema = z.object({
-    objectType: z.int().min(1).describe('The object type to get metadata for'),
+    objectType: z.int().positive('Object type must be a positive integer').describe('The object type to get metadata for'),
     fieldName: z.string().describe('The picklist field name to get the values for'),
 });
 

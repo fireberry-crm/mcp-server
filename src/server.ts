@@ -9,6 +9,7 @@ import {
     objectCreateToolInputSchema,
     registerTools,
     fieldCreateToolInputSchemaForCall,
+    queryToolInputSchema,
 } from './tools/registerTools.js';
 import { logger } from './utils/index.js';
 import { SERVER_DESCRIPTION, SERVER_NAME, ToolNames, VERSION, type ToolName } from './constants.js';
@@ -116,6 +117,13 @@ export function createServer(tokenid: string) {
                 if (!parsedArgs.success) return createToolResponseParsingError(`Error parsing field creation arguments`, parsedArgs.error);
 
                 const result = await fireberryApi.createField(parsedArgs.data);
+                return createToolResponse(result);
+            }
+            case ToolNames.query: {
+                const parsedArgs = queryToolInputSchema.safeParse(args);
+                if (!parsedArgs.success) return createToolResponseParsingError(`Error parsing query arguments`, parsedArgs.error);
+
+                const result = await fireberryApi.query(parsedArgs.data);
                 return createToolResponse(result);
             }
             default:

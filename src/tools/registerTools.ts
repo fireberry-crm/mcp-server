@@ -4,6 +4,7 @@ import { metadataPicklistToolInputSchema, metadataObjectsToolInputSchema, metada
 import { recordCreateToolInputSchema, recordUpdateToolInputSchema } from './record/index.js';
 import { objectCreateToolInputSchema } from './object/index.js';
 import { fieldCreateToolInputSchemaForRegister, fieldCreateToolInputSchemaForCall } from './field/index.js';
+import { queryToolInputSchema } from './query/index.js';
 
 export {
     metadataPicklistToolInputSchema,
@@ -14,6 +15,7 @@ export {
     objectCreateToolInputSchema,
     fieldCreateToolInputSchemaForRegister,
     fieldCreateToolInputSchemaForCall,
+    queryToolInputSchema,
 };
 
 /**
@@ -56,6 +58,11 @@ export async function registerTools() {
                 name: ToolNames.fieldCreate,
                 description: 'create a new text field in a crm object',
                 inputSchema: zodToJsonSchema(fieldCreateToolInputSchemaForRegister),
+            },
+            {
+                name: ToolNames.query,
+                description: 'query a crm object',
+                inputSchema: zodToJsonSchema(queryToolInputSchema),
             },
         ],
     } as const satisfies {

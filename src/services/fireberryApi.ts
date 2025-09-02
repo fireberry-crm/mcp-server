@@ -15,6 +15,7 @@ import { recordCreateResponseSchema, recordUpdateResponseSchema, type CreateReco
 import { objectCreateResponseSchema, type CreateObject } from '../tools/object/index.js';
 import { fieldCreateResponseSchema, type CreateField } from '../tools/field/index.js';
 import { FieldTypeNames, type CreateFieldInputSchema, type FieldTypeNamesForCreate } from '../tools/field/create.js';
+import { queryResponseSchema, type QueryResponse, type QuerySchema } from '../tools/query/index.js';
 
 interface FireberryError {
     Message: AutocompleteString<
@@ -26,8 +27,19 @@ interface FireberryError {
         | 'Invalid Options' //picklist
     >;
 }
+
+interface FireberryQueryError {
+    status: number;
+    error: string;
+    message: string;
+}
 function isFireberryError(error: unknown): error is FireberryError {
     const errorSchema = z.object({ Message: z.string() });
+    const parsedError = errorSchema.safeParse(error);
+    return parsedError.success;
+}
+function isFireberryQueryError(error: unknown): error is FireberryQueryError {
+    const errorSchema = z.object({ status: z.number(), error: z.string(), message: z.string() });
     const parsedError = errorSchema.safeParse(error);
     return parsedError.success;
 }
@@ -216,6 +228,28 @@ export const getFireberryApi = (tokenid: string) => {
                     return { error: 'Invalid response format from API' };
                 }
 
+                return parsedData.data;
+            } catch (error) {
+                logger.error(error as string);
+                return { error: 'Unknown error' };
+            }
+        },
+        query: async (queryData: QuerySchema): Promise<QueryResponse | { error: string }> => {
+            try {
+                const endpoint = `${env.BASE_URL}/api/v3/query`;
+                const response = await fetch(endpoint, { method: 'POST', headers, body: JSON.stringify(queryData) });
+                const data = await response.json();
+
+                if (isFireberryQueryError(data)) {
+                    return { error: data.message };
+                }
+
+                const parsedData = queryResponseSchema.safeParse(data);
+                if (!parsedData.success) {
+                    logger.error('Failed to parse query response:', parsedData.error);
+                    logger.debug('response:', data);
+                    return { error: 'Invalid response format from API' };
+                }
                 return parsedData.data;
             } catch (error) {
                 logger.error(error as string);

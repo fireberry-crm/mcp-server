@@ -12,6 +12,7 @@ export const ToolNames = {
     recordUpdate: 'record_update',
     objectCreate: 'object_create',
     fieldCreate: 'field_create',
+    query: 'query',
 } as const;
 export type ToolName = (typeof ToolNames)[keyof typeof ToolNames];
 
