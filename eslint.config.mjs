@@ -33,6 +33,19 @@ const tsESLintConfig = tseslint.config(
         },
         rules: {
             '@typescript-eslint/no-explicit-any': 'error', // enforce type safety
+            '@typescript-eslint/no-confusing-void-expression': 'error',
+            '@typescript-eslint/no-unused-vars': [
+                'error',
+                {
+                    args: 'all',
+                    argsIgnorePattern: '^_',
+                    caughtErrorsIgnorePattern: '^_',
+                    destructuredArrayIgnorePattern: '^_',
+                    varsIgnorePattern: '^_',
+                    ignoreRestSiblings: true,
+                },
+            ],
+
             '@typescript-eslint/no-restricted-types': [
                 'error',
                 {
@@ -46,7 +59,6 @@ const tsESLintConfig = tseslint.config(
                     },
                 },
             ],
-            '@typescript-eslint/strict-boolean-expressions': 'error',
             'prettier/prettier': 'error', // formatting as lint errors
         },
     },

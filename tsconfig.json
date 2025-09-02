@@ -4,14 +4,16 @@
         "lib": [
             "ESNext"
         ],
-        "target": "ESNext",
-        "module": "ESNext",
+        "target": "es2020",
+        "module": "node18",
         "moduleDetection": "force",
         "jsx": "react-jsx",
         "allowJs": true,
         // Bundler mode
-        "moduleResolution": "bundler",
+        "resolveJsonModule": true,
+        "moduleResolution": "nodenext",
         "verbatimModuleSyntax": true,
+        "erasableSyntaxOnly": true,
         "noEmit": true,
         // Best practices
         "strict": true,

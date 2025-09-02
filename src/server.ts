@@ -9,10 +9,11 @@ import {
     objectCreateToolInputSchema,
     registerTools,
     fieldCreateToolInputSchemaForCall,
+    queryToolInputSchema,
 } from './tools/registerTools.js';
 import { logger } from './utils/index.js';
 import { SERVER_DESCRIPTION, SERVER_NAME, ToolNames, VERSION, type ToolName } from './constants.js';
-import { fireberryApi } from './services/fireberryApi.js';
+import { initFireberryApi } from './services/fireberryApi.js';
 import { z } from 'zod';
 
 function safeStringify(data: unknown) {
@@ -42,7 +43,7 @@ function createToolResponseParsingError(msg: string, error: z.ZodError) {
 /**
  * Create and configure the MCP server (shared for both stdio and HTTP)
  */
-export function createServer() {
+export function createServer(tokenid: string) {
     const server = new Server(
         {
             name: SERVER_NAME,
@@ -64,6 +65,7 @@ export function createServer() {
     server.setRequestHandler(CallToolRequestSchema, async (request) => {
         const { name, arguments: args } = request.params;
 
+        const fireberryApi = initFireberryApi(tokenid);
         switch (name as ToolName) {
             case ToolNames.metadataObjects: {
                 const metadataObjects = await fireberryApi.getMetadataObjects();
@@ -117,15 +119,22 @@ export function createServer() {
                 const result = await fireberryApi.createField(parsedArgs.data);
                 return createToolResponse(result);
             }
+            case ToolNames.query: {
+                const parsedArgs = queryToolInputSchema.safeParse(args);
+                if (!parsedArgs.success) return createToolResponseParsingError(`Error parsing query arguments`, parsedArgs.error);
+
+                const result = await fireberryApi.query(parsedArgs.data);
+                return createToolResponse(result);
+            }
             default:
                 throw new Error(`Unknown tool: ${name}`);
         }
     });
 
     // Cleanup function for proper resource management
-    const cleanup = () => {
+    const cleanup = async () => {
         logger.info('Cleaning up server resources...');
-        // Add any cleanup logic here (close database connections, etc.)
+        await server.close();
     };
 
     return { server, cleanup };

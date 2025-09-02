@@ -1,12 +1,19 @@
 {
     "name": "@fireberry/mcp-server",
     "description": "MCP Server for hassle-free usage of Fireberry's API.",
-    "version": "0.0.3",
-    "main": "dist/stdio.js",
-    "module": "src/stdio.ts",
+    "version": "0.1.0",
+    "main": "dist/cli.js",
+    "module": "src/cli.ts",
     "type": "module",
+    "exports": {
+        ".": {
+            "import": "./dist/index.js",
+            "types": "./dist/index.d.ts",
+            "default": "./src/index.ts"
+        }
+    },
     "bin": {
-        "mcp-fireberry": "dist/stdio.js"
+        "mcp-fireberry": "dist/cli.js"
     },
     "files": [
         "dist/**/*",
@@ -25,7 +32,7 @@
         "lint:fix": "eslint --fix",
         "format": "prettier --write ./**/*.{ts,js,mjs}",
         "inspect": "mcp-inspector",
-        "start": "node dist/stdio.js",
+        "start": "node dist/cli.js",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "contributors": [
@@ -36,11 +43,7 @@
         }
     ],
     "dependencies": {
-        "@modelcontextprotocol/sdk": "^1.17.0",
-        "@types/cors": "^2.8.19",
-        "@types/express": "^5.0.3",
-        "cors": "^2.8.5",
-        "express": "^5.1.0",
+        "@modelcontextprotocol/sdk": "^1.17.4",
         "zod": "^4.0.17"
     },
     "devDependencies": {
@@ -66,6 +69,27 @@
         "node": ">=18",
         "npm": ">=8.0.0"
     },
+    "keywords": [
+        "fireberry",
+        "crm",
+        "mcp",
+        "sales",
+        "marketing",
+        "ai",
+        "mcp server",
+        "ai integration",
+        "model context protocol",
+        "crm automation",
+        "fireberry api",
+        "ai assistant",
+        "crm schema management",
+        "nodejs",
+        "crm integration",
+        "customer data",
+        "real-time sync",
+        "record automation",
+        "secure integration"
+    ],
     "repository": {
         "type": "git",
         "url": "https://github.com/fireberry-crm/mcp-server.git"
