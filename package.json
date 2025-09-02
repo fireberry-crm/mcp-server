@@ -1,7 +1,7 @@
 {
     "name": "@fireberry/mcp-server",
     "description": "MCP Server for hassle-free usage of Fireberry's API.",
-    "version": "0.0.3",
+    "version": "0.1.0",
     "main": "dist/cli.js",
     "module": "src/cli.ts",
     "type": "module",
@@ -69,6 +69,27 @@
         "node": ">=18",
         "npm": ">=8.0.0"
     },
+    "keywords": [
+        "fireberry",
+        "crm",
+        "mcp",
+        "sales",
+        "marketing",
+        "ai",
+        "mcp server",
+        "ai integration",
+        "model context protocol",
+        "crm automation",
+        "fireberry api",
+        "ai assistant",
+        "crm schema management",
+        "nodejs",
+        "crm integration",
+        "customer data",
+        "real-time sync",
+        "record automation",
+        "secure integration"
+    ],
     "repository": {
         "type": "git",
         "url": "https://github.com/fireberry-crm/mcp-server.git"
