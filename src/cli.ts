@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import { main } from './stdio.js';
 import { logger } from './utils/index.js';
 
