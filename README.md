@@ -34,7 +34,7 @@ Add to your MCP configuration file:
     "mcpServers": {
         "fireberry-crm": {
             "command": "npx",
-            "args": ["-y", "@fireberry/mcp-server"],
+            "args": ["-y", "@fireberry/mcp-server@latest"],
             "env": {
                 "FIREBERRY_TOKEN_ID": "<your-token-here>"
             }
@@ -50,7 +50,7 @@ Add to your MCP configuration file:
     "mcpServers": {
         "fireberry-crm": {
             "command": "bunx",
-            "args": ["@fireberry/mcp-server"],
+            "args": ["@fireberry/mcp-server@latest"],
             "env": {
                 "FIREBERRY_TOKEN_ID": "<your-token-here>"
             }
@@ -71,7 +71,7 @@ Update `claude_desktop_config.json` [from MCP official docs](https://modelcontex
     "mcpServers": {
         "fireberry-crm": {
             "command": "npx",
-            "args": ["-y", "@fireberry/mcp-server"],
+            "args": ["-y", "@fireberry/mcp-server@latest"],
             "env": {
                 "FIREBERRY_TOKEN_ID": "<your-token-here>"
             }
@@ -93,7 +93,7 @@ Add to `.vscode/settings.json`:
         "mcpServers": {
             "fireberry-crm": {
                 "command": "npx",
-                "args": ["-y", "@fireberry/mcp-server"],
+                "args": ["-y", "@fireberry/mcp-server@latest"],
                 "env": {
                     "FIREBERRY_TOKEN_ID": "<your-token-here>"
                 }
@@ -114,7 +114,7 @@ Navigate to Settings → MCP Servers and add:
 {
     "fireberry-crm": {
         "command": "npx",
-        "args": ["-y", "@fireberry/mcp-server"],
+        "args": ["-y", "@fireberry/mcp-server@latest"],
         "env": {
             "FIREBERRY_TOKEN_ID": "<your-token-here>"
         }
