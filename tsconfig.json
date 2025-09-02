@@ -13,6 +13,7 @@
         "resolveJsonModule": true,
         "moduleResolution": "nodenext",
         "verbatimModuleSyntax": true,
+        "erasableSyntaxOnly": true,
         "noEmit": true,
         // Best practices
         "strict": true,
