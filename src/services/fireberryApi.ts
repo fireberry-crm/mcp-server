@@ -67,7 +67,7 @@ const getFireberryMetadataResponseSchema = <T extends z.ZodObject | z.ZodArray>(
     });
 };
 
-export const getFireberryApi = (tokenid: string) => {
+export const initFireberryApi = (tokenid: string) => {
     const headers = {
         'Content-Type': 'application/json',
         tokenid,

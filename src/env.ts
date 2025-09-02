@@ -17,7 +17,6 @@ const envSchema = z.object({
     FIREBERRY_TOKEN_ID: z.uuid(),
     LOG_LEVEL: z.enum(['debug', 'info', 'warn', 'error']).default('info'),
     TRANSPORT: z.enum(['stdio', 'http']).default('stdio'),
-    PORT: z.coerce.number().int().default(3001),
 });
 
 const envResult = envSchema.safeParse(process.env);

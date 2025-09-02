@@ -13,7 +13,7 @@ import {
 } from './tools/registerTools.js';
 import { logger } from './utils/index.js';
 import { SERVER_DESCRIPTION, SERVER_NAME, ToolNames, VERSION, type ToolName } from './constants.js';
-import { getFireberryApi } from './services/fireberryApi.js';
+import { initFireberryApi } from './services/fireberryApi.js';
 import { z } from 'zod';
 
 function safeStringify(data: unknown) {
@@ -65,7 +65,7 @@ export function createServer(tokenid: string) {
     server.setRequestHandler(CallToolRequestSchema, async (request) => {
         const { name, arguments: args } = request.params;
 
-        const fireberryApi = getFireberryApi(tokenid);
+        const fireberryApi = initFireberryApi(tokenid);
         switch (name as ToolName) {
             case ToolNames.metadataObjects: {
                 const metadataObjects = await fireberryApi.getMetadataObjects();
