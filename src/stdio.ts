@@ -5,11 +5,10 @@ import { env } from './env.js';
 import { createServer } from './server.js';
 import { logger } from './utils/index.js';
 
-logger.info('Starting Fireberry MCP Server (stdio)...');
-
 export async function main() {
+    logger.info('Starting Fireberry MCP Server (stdio)...');
     const transport = new StdioServerTransport();
-    const { server, cleanup } = createServer(env.FIREBERRY_TOKEN_ID);
+    const { server, cleanup } = createServer(env.FIREBERRY_TOKEN_ID, logger);
 
     await server.connect(transport);
 
