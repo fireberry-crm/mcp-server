@@ -19,6 +19,8 @@
         "dist/**/*",
         "src/**/*",
         "docs/**/*",
+        "tsconfig.json",
+        "tsconfig.prod.json",
         "LICENSE.md",
         "README.md"
     ],
@@ -33,6 +35,7 @@
         "format": "prettier --write ./**/*.{ts,js,mjs}",
         "inspect": "npx -y @modelcontextprotocol/inspector@latest",
         "start": "node dist/cli.js",
+        "prepare": "npm run build",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "contributors": [
