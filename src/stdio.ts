@@ -5,8 +5,9 @@ import { z } from 'zod';
 
 import { createServer } from './server.js';
 import { logger } from './utils/index.js';
+import type { ToolsBundle } from './constants.js';
 
-export async function main() {
+export async function main({ toolsBundle }: { toolsBundle: ToolsBundle }) {
     logger.info('Starting Fireberry MCP Server (stdio)...');
 
     const transport = new StdioServerTransport();
@@ -18,7 +19,7 @@ export async function main() {
         process.exit(1);
     }
 
-    const { server, cleanup } = createServer(envResult.data.FIREBERRY_TOKEN_ID, logger);
+    const { server, cleanup } = createServer(envResult.data.FIREBERRY_TOKEN_ID, logger, { toolsBundle });
 
     await server.connect(transport);
 

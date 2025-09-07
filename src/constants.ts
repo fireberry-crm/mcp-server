@@ -1,4 +1,5 @@
 import packageJson from '../package.json' with { type: 'json' };
+import { z } from 'zod';
 
 export const VERSION = packageJson.version;
 export const SERVER_NAME = packageJson.name;
@@ -15,6 +16,21 @@ export const ToolNames = {
     query: 'query',
 } as const;
 export type ToolName = (typeof ToolNames)[keyof typeof ToolNames];
+
+export const TOOLS_BUNDLES = {
+    /** Used for manipulating the system schema, such as creating objects, fields, picklists, etc. */
+    systemAdmin: 'system-admin',
+    /** Used for importing data into the system */
+    importer: 'importer',
+    /** Used for manipulingg the records and getting insights */
+    insights: 'insights',
+    /** Used for unfiltered access to all tools */
+    all: 'all',
+} as const;
+
+export type ToolsBundle = (typeof TOOLS_BUNDLES)[keyof typeof TOOLS_BUNDLES];
+
+export const toolsBundleSchema = z.enum(TOOLS_BUNDLES);
 
 export const FieldTypes = {
     date: '83bf530c-e04c-462b-9ffc-a46f750fc072',
