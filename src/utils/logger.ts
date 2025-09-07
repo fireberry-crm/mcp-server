@@ -12,22 +12,14 @@ const levels = {
     error: 3,
 } as const satisfies Record<LogLevel, number>;
 
-const logMethods: Record<LogLevel, (message: unknown, ...args: unknown[]) => void> =
-    env.TRANSPORT === 'stdio'
-        ? {
-              debug: console.error,
-              info: console.error,
-              warn: console.error,
-              error: console.error,
-          }
-        : {
-              debug: console.debug,
-              info: console.info,
-              warn: console.warn,
-              error: console.error,
-          };
+export interface Logger {
+    debug(message: string, ...args: unknown[]): void;
+    info(message: string, ...args: unknown[]): void;
+    warn(message: string, ...args: unknown[]): void;
+    error(message: string, ...args: unknown[]): void;
+}
 
-class Logger {
+class StdioLogger implements Logger {
     private level: LogLevel;
 
     constructor(level: LogLevel = 'info') {
@@ -42,30 +34,30 @@ class Logger {
     }
     debug(message: string, ...args: unknown[]): void {
         if (this.shouldLog('debug')) {
-            logMethods.debug(`${this.date} [DEBUG] ${message}`, ...args);
+            console.error(`${this.date} [DEBUG] ${message}`, ...args);
         }
     }
 
     info(message: string, ...args: unknown[]): void {
         if (this.shouldLog('info')) {
-            logMethods.info(`${this.date} [INFO] ${message}`, ...args);
+            console.error(`${this.date} [INFO] ${message}`, ...args);
         }
     }
 
     warn(message: string, ...args: unknown[]): void {
         if (this.shouldLog('warn')) {
-            logMethods.warn(`${this.date} [WARN] ${message}`, ...args);
+            console.error(`${this.date} [WARN] ${message}`, ...args);
         }
     }
 
     error(message: string, ...args: unknown[]): void {
         if (this.shouldLog('error')) {
-            logMethods.error(`${this.date} [ERROR] ${message}`, ...args);
+            console.error(`${this.date} [ERROR] ${message}`, ...args);
         }
     }
 }
 
 // Create default logger instance
-const logger = new Logger(env.LOG_LEVEL);
+const logger = new StdioLogger(env.LOG_LEVEL);
 
 export { logger };

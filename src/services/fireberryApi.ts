@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { logger } from '../utils/index.js';
+import { type Logger } from '../utils/index.js';
 import { env } from '../env.js';
 import type { AutocompleteString } from '../types/index.js';
 import { ReverseFieldTypes } from '../constants.js';
@@ -67,7 +67,7 @@ const getFireberryMetadataResponseSchema = <T extends z.ZodObject | z.ZodArray>(
     });
 };
 
-export const initFireberryApi = (tokenid: string) => {
+export const initFireberryApi = (tokenid: string, logger: Logger) => {
     const headers = {
         'Content-Type': 'application/json',
         tokenid,

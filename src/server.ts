@@ -11,39 +11,46 @@ import {
     fieldCreateToolInputSchemaForCall,
     queryToolInputSchema,
 } from './tools/registerTools.js';
-import { logger } from './utils/index.js';
+import { type Logger } from './utils/index.js';
 import { SERVER_DESCRIPTION, SERVER_NAME, ToolNames, VERSION, type ToolName } from './constants.js';
 import { initFireberryApi } from './services/fireberryApi.js';
 import { z } from 'zod';
 
-function safeStringify(data: unknown) {
-    try {
-        return JSON.stringify(data, null, 2);
-    } catch (error) {
-        logger.error(error as string);
-        return 'Internal server error';
-    }
-}
-function createToolResponse(data: unknown) {
-    const isError = typeof data === 'object' && data !== null && 'error' in data && data.error !== undefined;
-    return {
-        content: [{ type: 'text' as const, text: typeof data === 'string' ? data : isError ? data.error : safeStringify(data) }],
-        isError,
-    };
-}
-
-/** provides the model error context for when the schema for register won't be as strict as the schema to call*/
-function createToolResponseParsingError(msg: string, error: z.ZodError) {
-    return {
-        content: [{ type: 'text' as const, text: `${msg} ${JSON.stringify(z.treeifyError(error), null, 2)}` }],
-        isError: true,
-    };
-}
+const noopDefaultLogger: Logger = {
+    debug: () => {},
+    info: () => {},
+    warn: () => {},
+    error: () => {},
+};
 
 /**
  * Create and configure the MCP server (shared for both stdio and HTTP)
  */
-export function createServer(tokenid: string) {
+export function createServer(tokenid: string, logger: Logger = noopDefaultLogger) {
+    function safeStringify(data: unknown) {
+        try {
+            return JSON.stringify(data, null, 2);
+        } catch (error) {
+            logger.error(error as string);
+            return 'Internal server error';
+        }
+    }
+    function createToolResponse(data: unknown) {
+        const isError = typeof data === 'object' && data !== null && 'error' in data && data.error !== undefined;
+        return {
+            content: [{ type: 'text' as const, text: typeof data === 'string' ? data : isError ? data.error : safeStringify(data) }],
+            isError,
+        };
+    }
+
+    /** provides the model error context for when the schema for register won't be as strict as the schema to call*/
+    function createToolResponseParsingError(msg: string, error: z.ZodError) {
+        return {
+            content: [{ type: 'text' as const, text: `${msg} ${JSON.stringify(z.treeifyError(error), null, 2)}` }],
+            isError: true,
+        };
+    }
+
     const server = new Server(
         {
             name: SERVER_NAME,
@@ -65,7 +72,7 @@ export function createServer(tokenid: string) {
     server.setRequestHandler(CallToolRequestSchema, async (request) => {
         const { name, arguments: args } = request.params;
 
-        const fireberryApi = initFireberryApi(tokenid);
+        const fireberryApi = initFireberryApi(tokenid, logger);
         switch (name as ToolName) {
             case ToolNames.metadataObjects: {
                 const metadataObjects = await fireberryApi.getMetadataObjects();
