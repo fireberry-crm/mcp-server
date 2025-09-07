@@ -5,11 +5,11 @@ if (process.env.NODE_ENV !== 'production') {
     try {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        if (['debug', 'info'].includes(process.env.LOG_LEVEL)) console.info('dotenv available, loading .env file');
+        if (['debug', 'info'].includes(process.env.LOG_LEVEL)) console.error('dotenv available, loading .env file');
         await import('dotenv/config');
     } catch {
         // dotenv is optional, silently continue if not available
-        if (process.env.LOG_LEVEL === 'debug') console.debug('dotenv not available, skipping .env file loading');
+        if (process.env.LOG_LEVEL === 'debug') console.error('dotenv not available, skipping .env file loading');
     }
 }
 
