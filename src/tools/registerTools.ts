@@ -1,3 +1,5 @@
+import type { Tool } from '@modelcontextprotocol/sdk/types.js';
+
 import { zodToJsonSchema } from '../utils/index.js';
 import { ToolNames } from '../constants.js';
 import { metadataPicklistToolInputSchema, metadataObjectsToolInputSchema, metadataFieldsToolInputSchema } from './metadata/index.js';
@@ -17,6 +19,10 @@ export {
     fieldCreateToolInputSchemaForCall,
     queryToolInputSchema,
 };
+
+interface FireberryMCPTool extends Tool {
+    name: (typeof ToolNames)[keyof typeof ToolNames];
+}
 
 /**
  * Register all tools and return the tools list
@@ -66,6 +72,6 @@ export async function registerTools() {
             },
         ],
     } as const satisfies {
-        tools: { name: (typeof ToolNames)[keyof typeof ToolNames]; description: string; inputSchema: object }[];
+        tools: FireberryMCPTool[];
     });
 }
