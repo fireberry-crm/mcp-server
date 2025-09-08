@@ -10,6 +10,8 @@ import {
     registerTools,
     fieldCreateToolInputSchemaForCall,
     queryToolInputSchema,
+    setMenuItemsToolInputSchema,
+    getMenuItemsToolInputSchema,
 } from './tools/registerTools.js';
 import { type Logger } from './utils/index.js';
 import { SERVER_DESCRIPTION, SERVER_NAME, ToolNames, VERSION, type ToolName, type ToolsBundle } from './constants.js';
@@ -135,6 +137,20 @@ export function createServer(
                 if (!parsedArgs.success) return createToolResponseParsingError(`Error parsing query arguments`, parsedArgs.error);
 
                 const result = await fireberryApi.query(parsedArgs.data);
+                return createToolResponse(result);
+            }
+            case ToolNames.getMenuItems: {
+                const parsedArgs = getMenuItemsToolInputSchema.safeParse(args);
+                if (!parsedArgs.success) return createToolResponseParsingError(`Error parsing get menu items arguments`, parsedArgs.error);
+
+                const result = await fireberryApi.getMenuItems();
+                return createToolResponse(result);
+            }
+            case ToolNames.setMenuItems: {
+                const parsedArgs = setMenuItemsToolInputSchema.safeParse(args);
+                if (!parsedArgs.success) return createToolResponseParsingError(`Error parsing set menu items arguments`, parsedArgs.error);
+
+                const result = await fireberryApi.setMenuItems(parsedArgs.data);
                 return createToolResponse(result);
             }
             default:

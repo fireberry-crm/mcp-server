@@ -16,6 +16,13 @@ import { objectCreateResponseSchema, type CreateObject } from '../tools/object/i
 import { fieldCreateResponseSchema, type CreateField } from '../tools/field/index.js';
 import { FieldTypeNames, type CreateFieldInputSchema, type FieldTypeNamesForCreate } from '../tools/field/create.js';
 import { queryResponseSchema, type QueryResponse, type QuerySchema } from '../tools/query/index.js';
+import {
+    getMenuItemsResponseSchema,
+    type GetMenuItemsResponse,
+    type SetMenuItemsResponse,
+    setMenuItemsResponseSchema,
+    type SetMenuItemInput,
+} from '../tools/settings/index.js';
 
 interface FireberryError {
     Message: AutocompleteString<
@@ -140,6 +147,38 @@ export const initFireberryApi = (tokenid: string, logger: Logger) => {
                     ...picklist,
                     fieldType: ReverseFieldTypes[systemFieldTypeId],
                 };
+            } catch (error) {
+                logger.error(error as string);
+                return { error: 'Unknown error' };
+            }
+        },
+        getMenuItems: async (): Promise<GetMenuItemsResponse | { error: string }> => {
+            try {
+                const endpoint = `${env.BASE_URL}/api/v2/user/menu`;
+                const response = await fetch(endpoint, { method: 'GET', headers });
+                const data = await response.json();
+                const parsedData = getMenuItemsResponseSchema.safeParse(data);
+                if (!parsedData.success) {
+                    logger.error('Failed to parse get menu items response:', parsedData.error);
+                    return { error: 'Invalid response format from API' };
+                }
+                return parsedData.data;
+            } catch (error) {
+                logger.error(error as string);
+                return { error: 'Unknown error' };
+            }
+        },
+        setMenuItems: async (items: SetMenuItemInput): Promise<SetMenuItemsResponse | { error: string }> => {
+            try {
+                const endpoint = `${env.BASE_URL}/api/v2/user/setmenuitems`;
+                const response = await fetch(endpoint, { method: 'POST', headers, body: JSON.stringify(items) });
+                const data = await response.json();
+                const parsedData = setMenuItemsResponseSchema.safeParse(data);
+                if (!parsedData.success) {
+                    logger.error('Failed to parse set menu items response:', parsedData.error);
+                    return { error: 'Invalid response format from API' };
+                }
+                return parsedData.data;
             } catch (error) {
                 logger.error(error as string);
                 return { error: 'Unknown error' };

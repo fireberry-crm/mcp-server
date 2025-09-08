@@ -9,6 +9,8 @@ export const ToolNames = {
     metadataObjects: 'metadata_objects',
     metadataFields: 'metadata_fields',
     metadataPicklist: 'metadata_picklist',
+    getMenuItems: 'get_menu_items',
+    setMenuItems: 'set_menu_items',
     recordCreate: 'record_create',
     recordUpdate: 'record_update',
     objectCreate: 'object_create',

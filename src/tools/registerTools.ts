@@ -7,6 +7,7 @@ import { recordCreateToolInputSchema, recordUpdateToolInputSchema } from './reco
 import { objectCreateToolInputSchema } from './object/index.js';
 import { fieldCreateToolInputSchemaForRegister, fieldCreateToolInputSchemaForCall } from './field/index.js';
 import { queryToolInputSchema } from './query/index.js';
+import { getMenuItemsToolInputSchema, setMenuItemsToolInputSchema } from './settings/index.js';
 
 export {
     metadataPicklistToolInputSchema,
@@ -18,6 +19,8 @@ export {
     fieldCreateToolInputSchemaForRegister,
     fieldCreateToolInputSchemaForCall,
     queryToolInputSchema,
+    getMenuItemsToolInputSchema,
+    setMenuItemsToolInputSchema,
 };
 
 interface FireberryMCPTool extends Tool {
@@ -70,7 +73,7 @@ const toolsEntries = [
         ToolNames.objectCreate,
         {
             name: ToolNames.objectCreate,
-            description: 'create a new crm object type',
+            description: 'create a new crm object type (will not add them by default to the menu/header)',
             inputSchema: zodToJsonSchema(objectCreateToolInputSchema),
         },
     ],
@@ -88,6 +91,22 @@ const toolsEntries = [
             name: ToolNames.query,
             description: 'query a crm object',
             inputSchema: zodToJsonSchema(queryToolInputSchema),
+        },
+    ],
+    [
+        ToolNames.getMenuItems,
+        {
+            name: ToolNames.getMenuItems,
+            description: 'get the current menu/header items',
+            inputSchema: zodToJsonSchema(getMenuItemsToolInputSchema),
+        },
+    ],
+    [
+        ToolNames.setMenuItems,
+        {
+            name: ToolNames.setMenuItems,
+            description: 'set the objects that will be displayed in the menu/header (preferably those that are highly useful)',
+            inputSchema: zodToJsonSchema(setMenuItemsToolInputSchema),
         },
     ],
 ] as const satisfies [ToolName, FireberryMCPTool][];
@@ -113,6 +132,8 @@ export function registerTools(toolsBundle: ToolsBundle = TOOLS_BUNDLES.all) {
                     toolsMap[ToolNames.metadataPicklist],
                     toolsMap[ToolNames.objectCreate],
                     toolsMap[ToolNames.fieldCreate],
+                    toolsMap[ToolNames.getMenuItems],
+                    toolsMap[ToolNames.setMenuItems],
                 ] as const;
             }
             break;
