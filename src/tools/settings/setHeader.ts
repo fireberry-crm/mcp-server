@@ -3,7 +3,7 @@ import { z } from 'zod';
 export const setMenuItemsToolInputSchema = z.object({
     items: z.array(
         z.object({
-            index: z.int().positive().describe('The position of the item in the header/menu'),
+            index: z.int().min(0).describe('The position of the item in the header/menu'),
             objectType: z
                 .int()
                 .positive()

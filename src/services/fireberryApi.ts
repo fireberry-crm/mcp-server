@@ -158,6 +158,7 @@ export const initFireberryApi = (tokenid: string, logger: Logger) => {
                 const response = await fetch(endpoint, { method: 'GET', headers });
                 const data = await response.json();
                 const parsedData = getMenuItemsResponseSchema.safeParse(data);
+                logger.debug('get menu items response:', JSON.stringify(data, null, 2));
                 if (!parsedData.success) {
                     logger.error('Failed to parse get menu items response:', parsedData.error);
                     return { error: 'Invalid response format from API' };
