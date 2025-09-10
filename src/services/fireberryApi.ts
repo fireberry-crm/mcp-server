@@ -81,18 +81,18 @@ export const initFireberryApi = (tokenid: string, logger: Logger) => {
     };
     return {
         getMetadataObjects: async (): Promise<MetadataObject[] | { error: string }> => {
-            const endpointV1 = `${env.BASE_URL}/metadata/records`;
+            const endpointV2 = `${env.BASE_URL}/api/v2/metadata/objects`;
             try {
-                const response = await fetch(endpointV1, { headers });
+                const response = await fetch(endpointV2, { headers });
                 const data = await response.json();
 
-                const parsedData = getFireberryMetadataResponseSchema(z.array(metadataObjectsResponseSchema).nonempty()).safeParse(data);
+                const parsedData = z.array(metadataObjectsResponseSchema).nonempty().safeParse(data);
                 if (!parsedData.success) {
                     logger.error('Failed to parse metadata objects response:', parsedData.error);
                     return { error: 'Invalid response format from API' };
                 }
 
-                return parsedData.data.data;
+                return parsedData.data;
             } catch (error) {
                 if (isFireberryError(error)) {
                     return { error: error.Message };
