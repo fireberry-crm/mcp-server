@@ -20,8 +20,6 @@ export type ToolName = (typeof ToolNames)[keyof typeof ToolNames];
 export const TOOLS_BUNDLES = {
     /** Used for manipulating the system schema, such as creating objects, fields, picklists, etc. */
     systemAdmin: 'system-admin',
-    /** Used for importing data into the system */
-    importer: 'importer',
     /** Used for manipulingg the records and getting insights */
     insights: 'insights',
     /** Used for unfiltered access to all tools */

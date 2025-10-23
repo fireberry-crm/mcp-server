@@ -128,18 +128,6 @@ export function registerTools(toolsBundle: ToolsBundle = TOOLS_BUNDLES.all) {
                 ] as const;
             }
             break;
-        case TOOLS_BUNDLES.importer:
-            {
-                tools = [
-                    toolsMap[ToolNames.metadataObjects],
-                    toolsMap[ToolNames.metadataFields],
-                    toolsMap[ToolNames.metadataPicklist],
-                    toolsMap[ToolNames.recordCreate],
-                    toolsMap[ToolNames.recordUpdate],
-                    toolsMap[ToolNames.query],
-                ] as const;
-            }
-            break;
         default:
             tools = Object.values(toolsMap);
     }
