@@ -1,10 +1,12 @@
 // @ts-check
 import eslint from '@eslint/js';
+import { defineConfig } from 'eslint/config';
+
 import prettierRecommended from 'eslint-plugin-prettier/recommended';
 import importPlugin from 'eslint-plugin-import-x';
 import tseslint from 'typescript-eslint';
 
-const tsESLintConfig = tseslint.config(
+const tsESLintConfig = defineConfig(
     {
         ignores: ['dist/', 'node_modules/', '**/*.d.ts', 'coverage/'],
     },
