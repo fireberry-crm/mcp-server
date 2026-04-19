@@ -21,5 +21,5 @@ function setAdditionalPropertiesFalse(node: unknown): void {
 export function zodToJsonSchema<T extends z.ZodObject>(schema: T): ToolSchema<T> {
     const json = z.toJSONSchema(schema, { io: 'input' });
     setAdditionalPropertiesFalse(json);
-    return json;
+    return json as ToolSchema<T>;
 }

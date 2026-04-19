@@ -43,8 +43,17 @@ export type Value = string | ISODateString | number | boolean;
 
 export type SortDirection = 'asc' | 'desc';
 
+export const AggrFunc = {
+    sum: 'SUM',
+    count: 'COUNT',
+    min: 'MIN',
+    max: 'MAX',
+} as const;
+
+export type AggrFunc = (typeof AggrFunc)[keyof typeof AggrFunc];
+
 export type QuerySchema = {
-    fields: { name: string }[];
+    fields: { name: string; alias?: string; aggrFunc?: AggrFunc }[];
     objectType: number;
     pageSize: number;
     orderBy?: { name: string; order?: SortDirection }[];

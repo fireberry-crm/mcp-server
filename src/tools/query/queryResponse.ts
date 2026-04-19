@@ -1,17 +1,9 @@
 import { z } from 'zod';
 
-interface QueryDataItem {
-    _id: string;
-    [key: string]: string | Date | number;
-}
-
-export interface QueryData {
-    data: QueryDataItem[];
-    isLastPage: boolean;
-}
+const queryDataItemSchema = z.record(z.string(), z.union([z.string(), z.date(), z.number(), z.null()]));
 
 export const queryResponseSchema = z.looseObject({
-    data: z.array(z.intersection(z.record(z.string(), z.union([z.string(), z.date(), z.number(), z.null()])), z.object({ _id: z.uuid() }))),
+    data: z.array(queryDataItemSchema),
     isLastPage: z.boolean(),
     pageNumber: z.number(),
     pageSize: z.number(),
