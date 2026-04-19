@@ -11,6 +11,7 @@ import {
     Type,
     type Value,
     AggrFunc,
+    RelativeDateToken,
 } from './constant.js';
 
 // Validation helper functions
@@ -85,52 +86,12 @@ const validators = {
     },
 };
 
-// Soft enum of relative date tokens accepted by the API on date/datetime
-// fields with `eq`/`ne`/`lt`/`gt`/`le`/`ge` operators. Listed here so the
-// LLM sees them as known values, but `z.string()` below still allows any
-// other string (ISO dates, IDs, etc.) — equivalent to TypeScript's
-// `RelativeDateToken | (string & {})` pattern.
-const RelativeDateToken = z.enum([
-    'now',
-    'today',
-    'yesterday',
-    'tomorrow',
-    'this-week',
-    'last-week',
-    'next-week',
-    'last-2-weeks',
-    'next-2-weeks',
-    'this-month',
-    'last-month',
-    'next-month',
-    'this-year',
-    'last-year',
-    'next-year',
-    'last-30-days',
-    'next-30-days',
-    'last-60-days',
-    'next-60-days',
-    'last-90-days',
-    'next-90-days',
-    'last-2-months',
-    'next-2-months',
-    'last-3-months',
-    'next-3-months',
-    'last-12-months',
-    'next-12-months',
-    'this-quarterly',
-    'last-quarterly',
-    'next-quarterly',
-    'quarterly-1',
-    'quarterly-2',
-    'quarterly-3',
-    'quarterly-4',
-    '2-days-ago',
-    '2-days-after',
-]);
-
-// Define value schema to match Value type from filter.ts
-const singleValueSchema = z.union([RelativeDateToken, z.string(), z.number(), z.boolean()]);
+// Value schema accepted by all condition operators. The union is order-sensitive:
+// relative date tokens (e.g. `last-30-days`) and ISO dates render in the JSON
+// schema as `enum` / `format: date` hints to the LLM, while `z.string()` still
+// accepts any other string (record IDs, field values, etc.) — equivalent to
+// TypeScript's `RelativeDateToken | (string & {})` pattern.
+const singleValueSchema = z.union([z.enum(RelativeDateToken), z.iso.date(), z.string(), z.number(), z.boolean()]);
 
 const conditionValueSchema = z
     .union([singleValueSchema, z.array(singleValueSchema)])
