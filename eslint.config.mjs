@@ -60,7 +60,6 @@ const tsESLintConfig = defineConfig(
                     },
                 },
             ],
-            '@typescript-eslint/no-deprecated': 'warn',
             'prettier/prettier': 'error', // formatting as lint errors
         },
     },
