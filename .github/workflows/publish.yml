@@ -17,7 +17,8 @@ jobs:
       attestations: write
     environment:
       name: npm
-      url: https://www.npmjs.com/package/${{ steps.package-info.outputs.name }}/v/${{ steps.package-info.outputs.version }}
+      url: https://www.npmjs.com/package/${{ steps.package-info.outputs.name }}/v/${{
+        steps.package-info.outputs.version }}
 
     steps:
       - name: Checkout repository
@@ -26,7 +27,11 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          # Pinned to dodge the broken bundled npm in Node 22.22.2 that
+          # crashes on `npm install -g npm@...` (yanks promise-retry mid-install).
+          # See: https://github.com/nodejs/node/issues/62430
+          # Bump back to floating "22" once a patched 22.x is released.
+          node-version: 22.22.0
           registry-url: "https://registry.npmjs.org/"
           cache: "npm"
           cache-dependency-path: ${{ github.workspace }}/package-lock.json
@@ -58,7 +63,7 @@ jobs:
           subject-path: "package.json"
 
       - name: Update npm version
-        run: npm install -g npm@latest
+        run: npm install -g npm@11.12.1
 
       - name: Publish to npm
         run: npm publish --provenance --access public
