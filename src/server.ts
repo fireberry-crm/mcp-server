@@ -55,6 +55,8 @@ export function createServer(
         };
     }
 
+    // TODO: migrate to McpServer (high-level SDK API)
+    // eslint-disable-next-line @typescript-eslint/no-deprecated
     const server = new Server(
         {
             name: SERVER_NAME,

@@ -86,7 +86,11 @@ const toolsEntries = [
         ToolNames.query,
         {
             name: ToolNames.query,
-            description: 'query a crm object',
+            description:
+                'Query CRM records with filtering, sorting, and pagination. ' +
+                'Field names support related-field traversal via underscore (e.g. `ownerid_fullname`). ' +
+                'Without `groupBy` returns individual records; with `groupBy` returns aggregated results ' +
+                '(`SUM`/`COUNT`/`MIN`/`MAX`) — non-aggregated and `orderBy` fields must appear in `groupBy`.',
             inputSchema: zodToJsonSchema(queryToolInputSchema),
         },
     ],

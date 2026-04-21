@@ -1,19 +1,20 @@
 // @ts-check
 import eslint from '@eslint/js';
+import { defineConfig } from 'eslint/config';
+
 import prettierRecommended from 'eslint-plugin-prettier/recommended';
-import importPlugin from 'eslint-plugin-import';
+import importPlugin from 'eslint-plugin-import-x';
 import tseslint from 'typescript-eslint';
 
-const tsESLintConfig = tseslint.config(
+const tsESLintConfig = defineConfig(
     {
         ignores: ['dist/', 'node_modules/', '**/*.d.ts', 'coverage/'],
     },
     {
         settings: {
-            'import/resolver': {
+            'import-x/resolver': {
                 typescript: true,
                 node: true,
-                bun: true,
             },
         },
     },
@@ -65,7 +66,8 @@ const tsESLintConfig = tseslint.config(
     {
         files: ['**/*.{ts,cts,mts}'],
         rules: {
-            'import/no-cycle': 'error',
+            'import-x/no-cycle': 'error',
+            'import-x/no-unresolved': 'off',
         },
         extends: [importPlugin.flatConfigs.recommended, importPlugin.flatConfigs.typescript],
     },

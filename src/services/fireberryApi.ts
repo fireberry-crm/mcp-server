@@ -15,7 +15,7 @@ import { recordCreateResponseSchema, recordUpdateResponseSchema, type CreateReco
 import { objectCreateResponseSchema, type CreateObject } from '../tools/object/index.js';
 import { fieldCreateResponseSchema, type CreateField } from '../tools/field/index.js';
 import { FieldTypeNames, type CreateFieldInputSchema, type FieldTypeNamesForCreate } from '../tools/field/create.js';
-import { queryResponseSchema, type QueryResponse, type QuerySchema } from '../tools/query/index.js';
+import { recordQueryResponseSchema, aggregatedQueryResponseSchema, type QueryResponse, type QuerySchema } from '../tools/query/index.js';
 
 interface FireberryError {
     Message: AutocompleteString<
@@ -244,7 +244,9 @@ export const initFireberryApi = (tokenid: string, logger: Logger) => {
                     return { error: data.message };
                 }
 
-                const parsedData = queryResponseSchema.safeParse(data);
+                const isAggregation = !!queryData.groupBy;
+                const responseSchema = isAggregation ? aggregatedQueryResponseSchema : recordQueryResponseSchema;
+                const parsedData = responseSchema.safeParse(data);
                 if (!parsedData.success) {
                     logger.error('Failed to parse query response:', parsedData.error);
                     logger.debug('response:', data);
