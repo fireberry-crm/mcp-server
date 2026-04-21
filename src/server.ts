@@ -12,7 +12,7 @@ import {
     queryToolInputSchema,
 } from './tools/registerTools.js';
 import { type Logger } from './utils/index.js';
-import { SERVER_DESCRIPTION, SERVER_NAME, ToolNames, VERSION, type ToolName, type ToolsBundle } from './constants.js';
+import { SERVER_DESCRIPTION, SERVER_NAME, ToolNames, VERSION, type ToolName } from './constants.js';
 import { initFireberryApi } from './services/fireberryApi.js';
 import { z } from 'zod';
 
@@ -26,11 +26,7 @@ const noopDefaultLogger: Logger = {
 /**
  * Create and configure the MCP server (shared for both stdio and HTTP)
  */
-export function createServer(
-    tokenid: string,
-    logger: Logger = noopDefaultLogger,
-    options: { toolsBundle: ToolsBundle } = { toolsBundle: 'all' }
-) {
+export function createServer(tokenid: string, logger: Logger = noopDefaultLogger) {
     function safeStringify(data: unknown) {
         try {
             return JSON.stringify(data, null, 2);
@@ -71,8 +67,8 @@ export function createServer(
     );
 
     // Register handlers
-    server.setRequestHandler(ListToolsRequestSchema, () => {
-        return registerTools(options.toolsBundle);
+    server.setRequestHandler(ListToolsRequestSchema, async () => {
+        return await registerTools();
     });
 
     server.setRequestHandler(CallToolRequestSchema, async (request) => {
