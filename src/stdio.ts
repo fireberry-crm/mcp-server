@@ -1,14 +1,25 @@
 #!/usr/bin/env node
 
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
-import { env } from './env.js';
+import { z } from 'zod';
+
 import { createServer } from './server.js';
 import { logger } from './utils/index.js';
+import type { ToolsBundle } from './constants.js';
 
-export async function main() {
+export async function main({ toolsBundle }: { toolsBundle: ToolsBundle }) {
     logger.info('Starting Fireberry MCP Server (stdio)...');
+
     const transport = new StdioServerTransport();
-    const { server, cleanup } = createServer(env.FIREBERRY_TOKEN_ID, logger);
+
+    const envResult = z.object({ FIREBERRY_TOKEN_ID: z.uuid() }).safeParse(process.env);
+
+    if (!envResult.success) {
+        logger.error('Environment validation failed:', z.treeifyError(envResult.error));
+        process.exit(1);
+    }
+
+    const { server, cleanup } = createServer(envResult.data.FIREBERRY_TOKEN_ID, logger, { toolsBundle });
 
     await server.connect(transport);
 
