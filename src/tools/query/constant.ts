@@ -98,6 +98,30 @@ export const AggrFunc = {
 
 export type AggrFunc = (typeof AggrFunc)[keyof typeof AggrFunc];
 
+/**
+ * Date-period buckets accepted by `groupBy[].datePeriod` on date/datetime
+ * fields. Exact periods (`HOUR`–`YEAR`) place each record at a unique point on
+ * the timeline; the `*_PART` periods and `DAY_OF_WEEK` are recurring and
+ * collapse records across years into the same slot. Mirrors the v3 query API's
+ * `DATE_PERIODS` keys.
+ */
+export const DatePeriod = {
+    hour: 'HOUR',
+    day: 'DAY',
+    week: 'WEEK',
+    month: 'MONTH',
+    quarter: 'QUARTER',
+    year: 'YEAR',
+    hourPart: 'HOUR_PART',
+    dayPart: 'DAY_PART',
+    weekPart: 'WEEK_PART',
+    monthPart: 'MONTH_PART',
+    quarterPart: 'QUARTER_PART',
+    dayOfWeek: 'DAY_OF_WEEK',
+} as const;
+
+export type DatePeriod = (typeof DatePeriod)[keyof typeof DatePeriod];
+
 export type QuerySchema = {
     fields: { name: string; alias?: string; aggrFunc?: AggrFunc }[];
     objectType: number;
@@ -105,7 +129,7 @@ export type QuerySchema = {
     orderBy?: { name: string; order?: SortDirection }[];
     pageNumber: number;
     filter?: Filter;
-    groupBy?: { name: string }[];
+    groupBy?: { name: string; datePeriod?: DatePeriod }[];
 };
 
 export const OPERATIONS_WITHOUT_VALUE: Operator[] = [Operator.isNull, Operator.isNotNull, Operator.currentUser];

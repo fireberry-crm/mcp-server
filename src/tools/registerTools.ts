@@ -90,7 +90,9 @@ const toolsEntries = [
                 'Query CRM records with filtering, sorting, and pagination. ' +
                 'Field names support related-field traversal via underscore (e.g. `ownerid_fullname`). ' +
                 'Without `groupBy` returns individual records; with `groupBy` returns aggregated results ' +
-                '(`SUM`/`COUNT`/`MIN`/`MAX`) — non-aggregated and `orderBy` fields must appear in `groupBy`.',
+                '(`SUM`/`COUNT`/`MIN`/`MAX`) — non-aggregated and `orderBy` fields must appear in `groupBy`. ' +
+                'A `groupBy` entry on a Date/DateTime field may set `datePeriod` to bucket by time ' +
+                '(e.g. by month, quarter, or day-of-week) for time-based analytics.',
             inputSchema: zodToJsonSchema(queryToolInputSchema),
         },
     ],
