@@ -18,8 +18,8 @@ function setAdditionalPropertiesFalse(node: unknown): void {
     for (const value of Object.values(obj)) setAdditionalPropertiesFalse(value);
 }
 
-export function zodToJsonSchema<T extends z.ZodObject>(schema: T): ToolSchema<T> {
+export function zodToJsonSchema(schema: z.ZodObject): ToolSchema {
     const json = z.toJSONSchema(schema, { io: 'input' });
     setAdditionalPropertiesFalse(json);
-    return json as ToolSchema<T>;
+    return json as ToolSchema;
 }

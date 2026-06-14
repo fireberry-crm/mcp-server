@@ -12,6 +12,7 @@ import {
     type Value,
     AggrFunc,
     RelativeDateToken,
+    DatePeriod,
 } from './constant.js';
 
 // Validation helper functions
@@ -158,6 +159,16 @@ const fieldWithOrderSchema = z.object({
 
 const groupByFieldSchema = z.object({
     name: z.string().min(1, { message: 'Field name cannot be empty' }).describe(`Field name to group results by. ${relatedFieldNote}`),
+    datePeriod: z
+        .enum(DatePeriod)
+        .optional()
+        .describe(
+            'Bucket a Date/DateTime field into a time period. Exact periods ' +
+                '(`HOUR`, `DAY`, `WEEK`, `MONTH`, `QUARTER`, `YEAR`) place each record at a unique point on the timeline ' +
+                '(good for trends over time); the `*_PART` periods (`HOUR_PART`, `DAY_PART`, `WEEK_PART`, `MONTH_PART`, ' +
+                '`QUARTER_PART`) and `DAY_OF_WEEK` are recurring and collapse records across years into the same slot ' +
+                '(good for seasonal/weekday patterns). Only valid on Date or DateTime fields.'
+        ),
 });
 
 const fieldSchema = z.object({
